@@ -322,6 +322,76 @@ means that it won't drop the dimension. The same can be done for the cases when
 we get either the column or row `x[1,,drop = F]` will return col 1 in the form
 of a matrix.
 
+#Partial Matching#
+For the command like with typing, work with `[` and `[[`.
+
+```R
+x <- list(something = 1:3)
+x$s # will output 1 2 3, because s matches the _s_omething
+x[["s"]] # NULL, because s is not a recognized name, the bracket is expecting
+an exact match.
+x[["s", exact = F]] # same as above.
+```
+
+This is cool, but I don't know what's the advantage, using x$a could introduce
+issues when accessing values, whoever is reading the code will need to know
+which a name is first.
+
+##Removing NA values##
+```R
+x <- c(1, 2, NA, 3, NA, 4)
+bad <- is.na(x)
+x[!bad] # 1 2 3 4
+```
+
+What about for multiple elements? Both element should have the same length. The
+NA positions don't need to match, but having an NA in one position of an element and not in the other would cause the position to be marked as NA in both.
+```R
+x <- c(1, 2, NA, 3, NA, 4, 5)
+y <- c("a", "b", NA, "d", NA, NA, "g")
+good <- complete.cases(x, y) #
+x[good] # 1 2 3 5 <- the 4 is missing because y[6] is NA
+y[good] # a b d g
+```
+
+How about a data set with missing values in different columns. This is an
+example taken from the class.
+```R
+airquality[1:6,]
+good <- complete.cases(airquality)
+airquality[good,][1:6,] # will remove the rows that don't have the complete
+values. About the [1:6], I don't know what it's about.
+```
+
+#Vectorized operations#
+Many R operations are vectorized
+```R
+x <- 1:6, y <- 7:12
+x + y # 8 10 12 14 16 18
+x > 2 # F F T T T T
+x >= 2 # F T T T T T
+y == 8 # F T F F F F
+x * y # 7 16...
+x / y # yes, what you imagine.
+```
+
+With matrices is similar
+```R
+x <- matrix(1:4, 2, 2), y <- (rep(10, 4), 2, 2)
+# x 1, 3    y 10 10
+#   2, 4      10 10
+x * y # This is an element to element multiplication.
+# Output
+# 10, 30
+# 20, 40
+x / y # is the same
+x %*% y # This a matrix multiplication
+# 40 40
+# 60 60
+```
+
+#SWIRL#
+Statistics with interative R Learning (swirlstats.com)
 
 #Resources#
 - http://datasciencespecialization.github.io/
