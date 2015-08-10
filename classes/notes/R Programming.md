@@ -60,7 +60,6 @@ x
  - integer
  - complex
  - logical (true/false)
-
 - Vector
  - Objects of the same class
  - Except list
@@ -76,7 +75,7 @@ c(T, 2) # numeric T=1, F=0
 c(T, "a") # character
 c("a", T) # character
 ```
-- Coercion can be excplicit
+- Coercion can be explicit
 ```R
 as.numeric(x)
 as.logical(x)
@@ -117,6 +116,8 @@ dim(x) # [1] 2 3
 ```
  - cbind(), rbind()
  - column binding, row binding
+ - bind them by column, bind them by row, for example, 2 vectors can be bind as
+   rows ending with a matrix of 2 by the length of the vector.
 
 - Factors, vector of numerics but where each integer has a label
  - Male, Female
@@ -177,6 +178,14 @@ dimnames(x) <- list(c("a", "b"), c("c", "d"))
 - source
 - dget: dparse?
 - load/unserialize: binary objects into R
+
+```R
+tabular <- read.table("tabular.txt")
+nrows(tabular) # number of rows
+names(tabular) # get the column names of the data frame.
+tail(tabular) # The last elements of an R object
+tail(tabular, 10) # The last 10 elements of an R object
+```
 
 #Read Large tables#
 If there are no comments set `comment.char=""`
@@ -259,9 +268,9 @@ making a `file` connection. Reading a compressed file calling either `gzfile`,
 - url
 
 `str(file)` it's important to know the initial params, the file name and then
-the open mode (r, w, a)
+the open mode (r, w, a).
 
-####Connections#####
+####Connections####
 
 ```R
 con <- file("file.csv" ,"r")
@@ -349,6 +358,7 @@ NA positions don't need to match, but having an NA in one position of an element
 ```R
 x <- c(1, 2, NA, 3, NA, 4, 5)
 y <- c("a", "b", NA, "d", NA, NA, "g")
+```
 good <- complete.cases(x, y) #
 x[good] # 1 2 3 5 <- the 4 is missing because y[6] is NA
 y[good] # a b d g
