@@ -109,7 +109,7 @@ x <-list(1, "a", T, 1 + 4i)
  - Other user defined attributes/metadata
  - attributes() -> sets/modifies atts in an object.
 
--Matrices
+- Matrices
  - has a `dimension` attribute
 ```R
 x <- matrix(nrow = 2, ncol = 3)
@@ -118,7 +118,7 @@ dim(x) # [1] 2 3
  - cbind(), rbind()
  - column binding, row binding
 
--Factors, vector of numerics but where each integer has a label
+- Factors, vector of numerics but where each integer has a label
  - Male, Female
  - Senior, Junior, Freshman, etc.
 ```R
@@ -132,6 +132,7 @@ unclass(x)
  - We can define the levels like
 ```R
 x <- factor(c("yes", "no", "no"), levels = c("yes", "no))
+```
 
 - Missing values
  - NA: Everything else
@@ -272,8 +273,8 @@ data <- read.csv("file.csv")
 ```
 
 #Subsetting#
-Keys to keep in mind: [, [[, $
-[ objects of the same class.
+Keys to keep in mind: `[`, `[[`, `$1
+`[` objects of the same class.
 
 ##Vectors##
 
