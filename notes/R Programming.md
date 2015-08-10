@@ -23,8 +23,8 @@
 - everything else (recommended...)
 - 4K CRAN packages.
 - CRAN has standards to be there
--- Documentation
--- Test
+ - Documentation
+ - Test
 
 #Getting Help#
 - Email
@@ -55,21 +55,21 @@ x
 #Data Types - R Objects and Attributes#
 - Everything in R is an object
 - Atomic classes
--- chars
--- numerics
--- integer
--- complex
--- logical (true/false)
+ - chars
+ - numerics
+ - integer
+ - complex
+ - logical (true/false)
 
 - Vector
--- Objects of the same class
--- Except list
--- Can be created with vector()
--- c() concatenate, creates vectors
--- vector("numeric", length = 0); default value 0
+ - Objects of the same class
+ - Except list
+ - Can be created with vector()
+ - c() concatenate, creates vectors
+ - vector("numeric", length = 0); default value 0
 - Mixing objects. Coercion happens behind the scenes so every element is of the
   same class.
--- least common denominator?
+ - least common denominator?
 ```R
 c(1.7, "a") # character
 c(T, 2) # numeric T=1, F=0
@@ -96,31 +96,31 @@ x <-list(1, "a", T, 1 + 4i)
 ```
 
 - Number
--- Double precission real number
--- L suffix to force an integer
--- Inf represents infinity
--- NaN (not a number) 0/0 -> NaN
+ - Double precission real number
+ - L suffix to force an integer
+ - Inf represents infinity
+ - NaN (not a number) 0/0 -> NaN
 
 - Attributes: R objects can have attrs
--- name, dimnames (dimension names)
--- dimensions (matrix, arrays)
--- class
--- length
--- Other user defined attributes/metadata
--- attributes() -> sets/modifies atts in an object.
+ - name, dimnames (dimension names)
+ - dimensions (matrix, arrays)
+ - class
+ - length
+ - Other user defined attributes/metadata
+ - attributes() -> sets/modifies atts in an object.
 
 -Matrices
--- has a `dimension` attribute
+ - has a `dimension` attribute
 ```R
 x <- matrix(nrow = 2, ncol = 3)
 dim(x) # [1] 2 3
 ```
--- cbind(), rbind()
--- column binding, row binding
+ - cbind(), rbind()
+ - column binding, row binding
 
 -Factors, vector of numerics but where each integer has a label
--- Male, Female
--- Senior, Junior, Freshman, etc.
+ - Male, Female
+ - Senior, Junior, Freshman, etc.
 ```R
 x <- factor(c("yes", "yes", "no", "no", "yes"))
 x #will print the values, plus 'levels' with the different options (yes, no)
@@ -128,24 +128,24 @@ table(x)
 # will print the freq of each value in the factor, yes 3, no 2.
 unclass(x)
 ```
--- Levels, no = 1, yes = 2, because n is before y
--- We can define the levels like
+ - Levels, no = 1, yes = 2, because n is before y
+ - We can define the levels like
 ```R
 x <- factor(c("yes", "no", "no"), levels = c("yes", "no))
 
 - Missing values
--- NA: Everything else
--- NaN: Mathematical values
--- is.na()
--- is.nan()
--- NaN ontainedC NA. is.na(NaN) == true
--- NA not contained in NaN. is.nan(NA) == false
+ - NA: Everything else
+ - NaN: Mathematical values
+ - is.na()
+ - is.nan()
+ - NaN ontainedC NA. is.na(NaN) == true
+ - NA not contained in NaN. is.nan(NA) == false
 
 - Data frame
--- store tabular data
--- Attributes: `row.names`
--- Generally created by calling `read.table()`, `read.csv()`
--- Can be converted to matrix: `data.matrix()`
+ - store tabular data
+ - Attributes: `row.names`
+ - Generally created by calling `read.table()`, `read.csv()`
+ - Can be converted to matrix: `data.matrix()`
 ```R
 x <- data.frame(foo = 1:4, bar = c(T, T, F, F))
 ```
@@ -157,11 +157,11 @@ names(x) # null
 names(x) <- c("a", "b", "c")
 x # will display the vector with each columns as especified above.
 ```
--- Lists can have names
+ - Lists can have names
 ```R
 x <- list(a = 1, b= 2, c=3)
 ```
--- Matrices can have names using `dimnames()`
+ - Matrices can have names using `dimnames()`
 ```R
 x <- matrix(1:4, nrow=2, ncol=2)
 dimnames(x) <- list(c("a", "b"), c("c", "d"))
@@ -218,8 +218,8 @@ metadata of the data set, so it doesn't need to be constructed from scratch.
 
 Advantages:
 - They can be edited
--- for those needed case, not for a day to day activity
--- In case of corruption for example.
+ - for those needed case, not for a day to day activity
+ - In case of corruption for example.
 - Work better with VCS (git)
 - Adhere to the Unix phiilosophy
 - Negative: not very space efficient.
