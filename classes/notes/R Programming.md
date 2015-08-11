@@ -282,7 +282,7 @@ data <- read.csv("file.csv")
 ```
 
 #Subsetting#
-Keys to keep in mind: `[`, `[[`, `$1
+Keys to keep in mind: `[`, `[[`, `$`
 `[` objects of the same class.
 
 ##Vectors##
@@ -358,7 +358,6 @@ NA positions don't need to match, but having an NA in one position of an element
 ```R
 x <- c(1, 2, NA, 3, NA, 4, 5)
 y <- c("a", "b", NA, "d", NA, NA, "g")
-```
 good <- complete.cases(x, y) #
 x[good] # 1 2 3 5 <- the 4 is missing because y[6] is NA
 y[good] # a b d g
