@@ -342,9 +342,9 @@ an exact match.
 x[["s", exact = F]] # same as above.
 ```
 
-This is cool, but I don't know what's the advantage, using x$a could introduce
+This is cool, but I don't know what's the advantage, using `x$a` could introduce
 issues when accessing values, whoever is reading the code will need to know
-which a name is first.
+which `a` name is first.
 
 ##Removing NA values##
 ```R
@@ -354,7 +354,7 @@ x[!bad] # 1 2 3 4
 ```
 
 What about for multiple elements? Both element should have the same length. The
-NA positions don't need to match, but having an NA in one position of an element and not in the other would cause the position to be marked as NA in both.
+`NA` positions don't need to match, but having an `NA` in one position of an element and not in the other would cause the position to be marked as `NA` in both.
 ```R
 x <- c(1, 2, NA, 3, NA, 4, 5)
 y <- c("a", "b", NA, "d", NA, NA, "g")
