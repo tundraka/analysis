@@ -303,3 +303,157 @@ global environment, ending in the empty environment.
 - **Note**. Think about the case where a function is defined in another function.
 
 ##Scoping rules##
+Let's look at the following example. We are declaring a function that will
+return another function. The parent functions received a parameter which is
+used in the function defined inside.
+
+We can see that from the `pow` function, the variable `n` is a free variable,
+`pow` doesn't know where it's defined.
+
+When `square` 
+```R
+make.power <- function(n) {
+    pow <- function(x) {
+        x^n
+    }
+
+    # we return the function.
+    pow
+}
+
+square <- make.power(2)
+cube <- make.power(3)
+
+square(3) # returns 9
+cube(3) # returns 27
+```
+
+The function `pow` has the free variable `n`, in order to find the values of
+`n`, since `make.power` is the environment in which `pow` is defined, we will
+look for the symbol `n` there first and then go to the parent and so on.
+
+##Exploring a function closure##
+What's in a function's environment? We can use the function `ls` to list all
+the objects in the current environment.
+
+In the following example we use the `ls` function passing as an argument the
+result of calling the function `environment` with function `cube` or `square`.
+The function `environemnt` returns an integer indicating the position of the
+environment specified, in this case the function `cube` or `square`. This
+position value is consumed by the `ls` function to determine the objects
+present in that environment.
+
+Notice how, when we list the objects in the `square` and `cube` function we get
+the same list of objects; the difference lies in the values that `n` takes in
+the different *closures*. For `cube` we get the value 3, and for `square` we
+get the value 2. In order to get the value for `n` in the two function is with
+the function `get`.
+
+```R
+ls()
+ls(environment("cube")) # will return "n", "pow"
+ls(environment("square")) # will also return "n", "pow"
+get("n", environment("cube")) # returns 3
+get("n", environment("square")) # returns 2
+```
+
+##Lexical vs dynamic scoping##
+As mentioned before lexical scoping is what R does. Dynamic scoping is what
+other programming languages do. Let's look at the example.
+```R
+y <- 10
+
+f <- function(x) {
+    y <- 2
+    y^2 + g(x)
+}
+
+g <- function(x) {
+    x + y
+}
+
+f(2) # prints 16
+```
+
+The function `f` defines the variable `y` as 2, which has nothing to do with
+the global variable `y <- 10`. The function `g` is a free variable, since
+`f` doesn't know anything about it.
+
+When calling `f(2)` we are setting `x <- 2` which is passed to `g(x)`, `y`
+inside `f` is set to 2 and elevated to the square 4, the we call the function
+`g` which is defined in the global environment; the function `g` uses the free
+varuable `y` which is found in the global environment with the value 10, this
+is how *lexical scoping* works. 10 is added to the 2 in `x`, total 12; going
+back to `f`, we add 4 to 12 and get the 16 which is displayed.
+
+In *dynamic scoping* the value of `y` is looked up in the environment from
+which the function `g` was called, the *calling environment*. In R the calling
+environment is known as the *parent frame*. With *dynamic scoping* `y` would
+have the value 2.
+
+*Lexical scoping* is comon in other programming languages like scheme, python,
+lisp, etc.
+
+##Consequences of lexical scoping##
+- In R, all objects must be stored in memory.
+- All function must carry a pointer to their respective defining environment.
+
+#Coding Standars#
+- Use a text editor
+- Indent the code. Minimum 4 spaces (my preference)
+- Limit the width of the code (80 columns, f.ex)
+- limit the length of functions.
+
+#Dates and Time in R#
+- Dates are represented by the `Date` class
+- Time is represented by the `POSIXct` or `POSIXlt` class.
+- Dates are internally stored as the number of days since 1970-01-01
+- Times are stored internally  as the number of seconds since 1970-01-01
+
+Dates represented in a character form can be coerced to Date with the `as.Date`
+function. The `unclass` function will return the actual number of days.
+
+```R
+x <- as.Date('1970-01-01')
+y <- as.Date('01-01-1970')
+x
+unclass(x) # print 0
+y # this will print something weird.
+```
+
+Times are stored in the following ways
+- POSIXct: the time will be stored as a very large number, this is useful when
+  we want to store the time in a data frame
+- POSIXlt: is a list underneath and stores a bunch of useful information like
+  the day of the week, year, month, etc
+- Times can be coerced between types with the functions `as.POSIXlt` and
+  `as.POSIXct`
+
+There are functions that work on dates and times
+- `weekdays`: gives the day of the week
+- `months`: give the month name
+- `quarters`: give the quarter number.
+
+```R
+x <- Sys.time()
+unclass(x) # should be an very large number (POSIXct)
+# We can coerce to 
+p <- as.POSIXlt(x)
+names(unclass(p))
+```
+
+Now for the case were dates are in different format we have the function
+`strptime`
+
+```R
+x <- c("January 10, 2015 10:40", "February 1, 1980 10:30")
+d <- strptime(x, "%B %d, %Y %H:%M")
+d # as above.
+```
+
+To see the list of formatting strings we can look in the help page `?strptime`
+
+Once we have a Date object, we can perform like `+`, `-`, `>`, `<=`, etc. The
+Date object keeps track of leap years, leap seconds, daylight savings and time
+zones. the plotting function will recognized Dates and modify the x, y axis to
+a way that accomodates functions.
