@@ -45,9 +45,8 @@ for (i in 1:10) {
 }
 
 x <- c("a", "b", "c", "d")
-for (i in 1:10) print(x[i])
-for (letter in x) print letter
 for (i in 1:4) print(x[i]) # I need to know the length
+for (letter in x) print letter
 for (i in seq_along(x)) print(x[i]) # this generates a vector from 1 to length
 ```
 
@@ -177,8 +176,9 @@ example).
 
 There are function that have a big number of attributes and with defaults, in
 order to access one of those attributes it'd be easier to match the argument
-with positional name as oppose to positional match (know what position the
+with *positional name* as oppose to *positional match* (know what position the
 attribute we are setting is)
+
 ```R
 myFunc <- function(x, y, z=1, t=13) {
     # something.
@@ -193,10 +193,11 @@ myFunc(y = 2, 1, 2)
 ```
 
 ##Lazy evaluation##
-Elements are evaluated (used) as required, for example, the following function
+Elements are evaluated (used) as required; for example, the following function
 has two params but the function only makes use of `a`, when calling the
 function we are only passing one param and this is fine, since `b` was never
-used we won't get any error. Why would we do that? 
+used we won't get any error. **Note**: Why would we do that? 
+
 ```R
 myFunc <- function(a, b) {
     a^2
@@ -205,7 +206,7 @@ myFunc <- function(a, b) {
 myFunc(2) # returns 4
 ```
 The following example will cause an error because the param `b` is used in the
-body of the function, we notice that the function will execute up to the point
+body of the function, notice that the function will execute up to the point
 where the error occurs.
 ```R
 myFunc <- function(a, b) {
@@ -244,10 +245,13 @@ myPlot <- function(x, y, type = "1", ...) {
 This deals with how R finds symbols. For example, the `lm` function is
 already defined in the *environment* `namespace:stats` we can see this
 information by executing `lm` in the R console.
+
 What is an environment? A list of symbols and values.
+
 How does R locates that function? R looks through different *environments*
 trying to find such symbol. We can see the list of environments with the
 function `search` which list all the packages that are currently loaded into R. The order that R follow to search for symbols is:
+
 1. Search in the global environment.
 2. Search in the namespaces of each of the packages listed in `search`
 
@@ -269,8 +273,9 @@ R will now what object we are referring.
   that.
 
 The following example defines a function using 2 formal arguments `x` and `y`,
-the variable `z` however is not an arguments and it definition it's not clear,
-`z` is a *free variable*, where is it defined?
+the *free variable* `z` however is not an arguments and it definition it's not
+clear, `z` is a *free variable*, where is it defined? 
+
 ```R
 myFunc <- function(x, y) {
     x * y * z
@@ -280,7 +285,7 @@ myFunc <- function(x, y) {
 ###Lexical scoping###
 Lexical scopingin R means: *the values of free variables are searched for in
 the environment in which the function was defined*
-- As mentioned above an environment is a collection of symbol, values.
+- As mentioned above an environment is a collection of symbol/values.
 - Every environment has a parent, and an environment can have multiple
   *"children"*
 - The only environment without a parent is the *empty environment*
@@ -289,11 +294,12 @@ the environment in which the function was defined*
 Going back to the example above, the free variable `z` would be search in the
 global environment, if I have an object called `z` it will be used. 
 In case there's no object called `z` in the global environment, we will
-continue the search in the parent environment. When we cal `search()` we can
+continue the search in the parent environment. When we call `search()` we can
 see a list of parent environments of `.GlobalEnv`, the search will continue
 through those environment until we hit the *top level environment*, usually the
 global environment, ending in the empty environment.
-**This needs review**. Specially the part of `search()`.
-**Note**. Think about the case where a function is defined in another function.
+
+- **This needs review**. Specially the part of `search()`.
+- **Note**. Think about the case where a function is defined in another function.
 
 ##Scoping rules##
