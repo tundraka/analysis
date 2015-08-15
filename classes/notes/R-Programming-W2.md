@@ -253,7 +253,7 @@ trying to find such symbol. We can see the list of environments with the
 function `search` which list all the packages that are currently loaded into R. The order that R follow to search for symbols is:
 
 1. Search in the global environment.
-2. Search in the namespaces of each of the packages listed in `search`
+1. Search in the namespaces of each of the packages listed in `search`
 
 - The global environment is always the first environment in the search list.
 - The last environment is always the base.
