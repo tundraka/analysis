@@ -101,5 +101,17 @@ Big or small data, you need the right data.
 - Negative predictive value: Probability(no disease | negative test)
 - Accuracy: Probability(correct outcome) 
 
+Good experiments
+- Have replication
+- Measure variability
+- Generalize to the problem you care about
+- Are transparent: code/data
+Prediction is not inference
+- Both can be important: depend on the app.
+Beware data dredging:
+
+> is the use of data mining to uncover patterns in data that can be presented as statistically significant, without first devising a specific hypothesis as to the underlying causality. - wikipedia.
+
 #Resources#
 - figshare.com
+- https://en.wikipedia.org/wiki/Data_dredging
