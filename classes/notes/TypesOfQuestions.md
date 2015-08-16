@@ -77,4 +77,29 @@ The data is the second most important thing, the question is number 1. Data
 will often limit or enable the question. Without a question data won't do much.
 
 #What about big data#
+Big or small data, you need the right data.
 
+> The data may not contain the answer. The combination of some data and an
+> aching desire for an answer does not ensure that a reasonable answer can be
+> extracted from a given body of data - *John Tukey*
+
+> ... not matter how big the data are. - *Jeff Leek*
+
+#Experimental design
+- Formulate your question in advance
+- Confounding, what variables create a correlation to other variables.
+
+###Prediction key quantities###
+|      |   | Disease| | 
+|      |   | +  | -  |
+| Test | + | TP | FP | 
+|      | - | FN | TN | 
+
+- Sensitivity: Probability(positive test | disease)
+- Specificity: Probability(negative test | no disease)
+- Positive predictive value: Probability(disease | positive test)
+- Negative predictive value: Probability(no disease | negative test)
+- Accuracy: Probability(correct outcome) 
+
+#Resources#
+- figshare.com
