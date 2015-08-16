@@ -457,3 +457,6 @@ Once we have a Date object, we can perform like `+`, `-`, `>`, `<=`, etc. The
 Date object keeps track of leap years, leap seconds, daylight savings and time
 zones. the plotting function will recognized Dates and modify the x, y axis to
 a way that accomodates functions.
+
+#Resources#
+- https://github.com/rdpeng/practice_assignment/blob/master/practice_assignment.rmd
