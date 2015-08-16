@@ -90,10 +90,10 @@ Big or small data, you need the right data.
 - Confounding, what variables create a correlation to other variables.
 
 ###Prediction key quantities###
-|      |   | Disease| | 
-|      |   | +  | -  |
+|   .  | . | Disease| . | 
+|   .  | . | +  | -  |
 | Test | + | TP | FP | 
-|      | - | FN | TN | 
+|   .  | - | FN | TN | 
 
 - Sensitivity: Probability(positive test | disease)
 - Specificity: Probability(negative test | no disease)
