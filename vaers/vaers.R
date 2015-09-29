@@ -1,7 +1,10 @@
-library(dplyr)
+library(data.table)
 
 # TODO. The Date fields are not detected.
-vaersdata <- read.csv('2014VAERSDATA.CSV')
+colClasses <- c('numeric', 'date', 'factor', rep('numeric', 3), 'factor', 'date',
+                'character', 'logical', 'date', rep('logical', 3), 'numeric',
+                rep('logical', 3)
+vaersdata <- fread('../data/VAERS/2014/2014VAERSDATA.CSV')
 vaersdata <- rename(vaersdata,
                     ReportDate = RECVDATE,
                     State = STATE,
