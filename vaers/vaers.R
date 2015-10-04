@@ -1,7 +1,7 @@
 library(data.table)
 
 vaersDataFile <- '../data/VAERS/2014/2014VAERSDATA.CSV'
-vaersDataFile <- '2014VAERSDATA.CSV'
+#vaersDataFile <- '2014VAERSDATA.CSV'
 datesAs <- 'character'
 colClasses <- c('numeric', datesAs, 'factor', rep('numeric', 3), 'factor', datesAs,
                 'character', 'factor', datesAs, rep('factor', 3), 'numeric',
