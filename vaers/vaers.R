@@ -1,6 +1,7 @@
 library(data.table)
+library(stringr)
 
-vaersDataFile <- '../data/VAERS/2014/2014VAERSDATA.CSV'
+vaersDataFile <- 'data/VAERS/2014/2014VAERSDATA.CSV'
 #vaersDataFile <- '2014VAERSDATA.CSV'
 datesAs <- 'character'
 colClasses <- c('numeric', datesAs, 'factor', rep('numeric', 3), 'factor', datesAs,
@@ -11,5 +12,9 @@ colClasses <- c('numeric', datesAs, 'factor', rep('numeric', 3), 'factor', dates
 # fread is reading string fields that contain a , as different fields, looks like
 # this is a know issue.
 vaersdata <- as.data.table(read.csv(vaersDataFile, colClasses=colClasses))
+currentColNames <- names(vaersdata)
+setnames(vaersdata, currentColNames, tolower(gsub('_', '', currentColNames)))
+
+vaersdata[,.(tot=.N), .(state)][order(-tot)]
 
 # TODO. The Date fields are not detected.
