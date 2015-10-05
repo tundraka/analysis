@@ -15,6 +15,9 @@ vaersdata <- as.data.table(read.csv(vaersDataFile, colClasses=colClasses))
 currentColNames <- names(vaersdata)
 setnames(vaersdata, currentColNames, tolower(gsub('_', '', currentColNames)))
 
-vaersdata[,.(tot=.N), .(state)][order(-tot)]
+totsByState <- vaersdata[,.(tot=.N), .(state)][order(-tot)]
+barplot(totsByState$tot)
+
+totsBySexState <- vaersdata[,.(tot=.N), .(state, sex)][order(-tot, state)]
 
 # TODO. The Date fields are not detected.
