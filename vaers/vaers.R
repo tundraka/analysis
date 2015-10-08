@@ -62,7 +62,15 @@ ggplot(ageDist, aes(ageyrs, tot)) +
     geom_bar(stat='identity') +
     labs(title='2014 VAERS: Age distribution')
 
-ageBreaks <- c(0, 1, 5, 10, 20, 30, 40, 1000)
-breakLabels <- c('0-1', '1-5', '5-10', '10-20', '20-30', '30-40', '40+')
-table(cut(vaersdata[!is.na(ageyrs), .(ageyrs)]$ageyrs, ageBreaks,
-         labels=breakLabels))
+# What's the age distribution and sex?
+ageBreaks <- c(-1, 1, 5, seq(10, 100, by=10), 2000)
+#ageLabels <- c('0-1', '1-5', '5-10', '10-20', '20-30', '30-40', '40-60', '60+')
+ages <- vaersdata[!is.na(ageyrs), .(ageyrs, sex)]
+ages[,agesegment:=cut(ages$ageyrs, ageBreaks)]#, labels=ageLabels)]
+ggplot(ages, aes(agesegment, fill=sex)) +
+    geom_bar() + 
+    labs(title='2014 VAERS: Reports by age.') +
+    labs(x='Age group') +
+    labs(y='Total')
+#table(cut(ages$ageyrs, ageBreaks,
+         #labels=breakLabels))
