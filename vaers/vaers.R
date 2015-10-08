@@ -1,10 +1,13 @@
+# Information about the data needed in this script can be found in the README.
+# https://github.com/tundraka/analysis/blob/master/vaers/README.md
+#
 library(data.table)
 library(stringr)
 library(ggplot2)
 
 dataLabel <- '2014 VAERS'
-
 datesAs <- 'character'
+
 #
 # READING VAERS DATA
 #
