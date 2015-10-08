@@ -3,7 +3,7 @@ library(stringr)
 library(ggplot2)
 
 vaersDataFile <- 'data/VAERS/2014/2014VAERSDATA.CSV'
-#vaersDataFile <- '2014VAERSDATA.CSV'
+
 datesAs <- 'character'
 colClasses <- c('numeric', datesAs, 'factor', rep('numeric', 3), 'factor', datesAs,
                 'character', 'factor', datesAs, rep('factor', 3), 'numeric',
@@ -38,24 +38,31 @@ currentColNames <- names(vaersdata)
 setnames(vaersdata, currentColNames, tolower(gsub('_', '', currentColNames)))
 
 totsByState <- vaersdata[,.(tot=.N), .(state)][order(-tot)]
-
-#ggplot(totsByState[1:20], aes(state, weight=tot)) +
-       #geom_bar() +
-       #labs(title='2014 VAERS: Reports by top 20 states')
-ggplot(totsByState[1:20], aes(state, tot)) +
+topTot <- 20
+ggplot(totsByState[1:topTot], aes(state, tot)) +
        geom_bar(stat='identity') +
-       labs(title='2014 VAERS: Reports by top 20 states')
-
+       labs(title=paste('2014 VAERS: Reports by top', topTot, 'states'))
 
 # Let's select only the top 10 states.
 # TODO. I need to order based on the total. Right now it's ordering by the state
 # and sex since the total by state is divided between male/female/unknown. Probably
 # what I'll need to do is some melt/dcast
-totsBySexState <- vaersdata[state==totsByState[1:10, .(state)]$state,
+topTot <- 10
+totsBySexState <- vaersdata[state==totsByState[1:topTot, .(state)]$state,
                             .(tot=.N),
                             .(state, sex)][order(state, sex)]
 
 ggplot(totsBySexState, aes(state, tot, fill=sex)) +
-    geom_bar(stat='identity', position='dodge') +
-    labs(title='2014 VAERS: Top 10 states with more reports')
-    
+    geom_bar(stat='identity') +
+    labs(title=paste('2014 VAERS: Top', topTot, 'states with more reports'))
+
+# What's the age distribution in the VAERS reports?
+ageDist <- vaersdata[!is.na(ageyrs),.(tot=.N),.(ageyrs)][order(ageyrs)]
+ggplot(ageDist, aes(ageyrs, tot)) +
+    geom_bar(stat='identity') +
+    labs(title='2014 VAERS: Age distribution')
+
+ageBreaks <- c(0, 1, 5, 10, 20, 30, 40, 1000)
+breakLabels <- c('0-1', '1-5', '5-10', '10-20', '20-30', '30-40', '40+')
+table(cut(vaersdata[!is.na(ageyrs), .(ageyrs)]$ageyrs, ageBreaks,
+         labels=breakLabels))

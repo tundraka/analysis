@@ -1,7 +1,7 @@
 #VAERS (Vaccine Adverser Event Reporting System) Data
 The VAERS data can be downloaded from [here][1]. The VAERS website has some
 diclaimers about the data, where it's coming from, and to be careful what you
-deduce from it.
+deduce from it. [Here's][3] video about VAERS
 
 I think the VAERS data doesn't offer the whole picture since this represent the
 report from the pacient, but we never know what the CDC did with that report,
@@ -25,10 +25,16 @@ https://vaers.hhs.gov/eSubDownload/index.jsp?fn={xxxx}VAERSData.zip
 - Is it possible to get more information about the event, specifically about the
   demographics? Like ethnicity, income, practice, etc.
 
+##About the data
+- How is the 
+
 ####VAERS Contact info.
 For more information, please call the VAERS Information Line toll-free at
 (800) 822-7967 or e-mail to info@vaers.org.
 
+#Glossary
+vax: vaccination
+
 [1]: https://vaers.hhs.gov/data/index
 [2]: https://vaers.hhs.gov/data/data
-
+[3]: https://www.youtube.com/watch?v=a9bXB3R2qP8
