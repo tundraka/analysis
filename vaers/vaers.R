@@ -2,6 +2,7 @@ library(data.table)
 library(stringr)
 library(ggplot2)
 
+dataLabel <- '2014 VAERS'
 vaersDataFile <- 'data/VAERS/2014/2014VAERSDATA.CSV'
 
 datesAs <- 'character'
@@ -41,7 +42,7 @@ totsByState <- vaersdata[,.(tot=.N), .(state)][order(-tot)]
 topTot <- 20
 ggplot(totsByState[1:topTot], aes(state, tot)) +
        geom_bar(stat='identity') +
-       labs(title=paste('2014 VAERS: Reports by top', topTot, 'states'))
+       labs(title=paste(paste(dataLabel, ': Reports by top', topTot, 'states')))
 
 # Let's select only the top 10 states.
 # TODO. I need to order based on the total. Right now it's ordering by the state
@@ -54,13 +55,13 @@ totsBySexState <- vaersdata[state==totsByState[1:topTot, .(state)]$state,
 
 ggplot(totsBySexState, aes(state, tot, fill=sex)) +
     geom_bar(stat='identity') +
-    labs(title=paste('2014 VAERS: Top', topTot, 'states with more reports'))
+    labs(title=paste(dataLabel, ': Top', topTot, 'states with more reports'))
 
 # What's the age distribution in the VAERS reports?
 ageDist <- vaersdata[!is.na(ageyrs),.(tot=.N),.(ageyrs)][order(ageyrs)]
 ggplot(ageDist, aes(ageyrs, tot)) +
     geom_bar(stat='identity') +
-    labs(title='2014 VAERS: Age distribution')
+    labs(title=paste(dataLabel, ': Age distribution'))
 
 # What's the age distribution and sex?
 ageBreaks <- c(-1, 1, 5, seq(10, 100, by=10), 2000)
@@ -69,7 +70,7 @@ ages <- vaersdata[!is.na(ageyrs), .(ageyrs, sex)]
 ages[,agesegment:=cut(ages$ageyrs, ageBreaks)]#, labels=ageLabels)]
 ggplot(ages, aes(agesegment, fill=sex)) +
     geom_bar() + 
-    labs(title='2014 VAERS: Reports by age.') +
+    labs(title=paste(dataLabel, ': Reports by age.')) +
     labs(x='Age group') +
     labs(y='Total')
 #table(cut(ages$ageyrs, ageBreaks,
