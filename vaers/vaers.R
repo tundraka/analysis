@@ -3,19 +3,41 @@ library(stringr)
 library(ggplot2)
 
 dataLabel <- '2014 VAERS'
-vaersDataFile <- 'data/VAERS/2014/2014VAERSDATA.CSV'
 
 datesAs <- 'character'
-colClasses <- c('numeric', datesAs, 'factor', rep('numeric', 3), 'factor', datesAs,
-                'character', 'factor', datesAs, rep('factor', 3), 'numeric',
-                rep('factor', 3), rep(datesAs, 2), 'numeric', 'character',
-                rep('factor', 2), rep('character', 5))
+#
+# READING VAERS DATA
+#
+vaersDataFile <- 'data/VAERS/2014/2014VAERSDATA.CSV'
+vaersColClasses <- c('numeric', datesAs, 'factor', rep('numeric', 3), 'factor',
+                     datesAs, 'character', 'factor', datesAs, rep('factor', 3),
+                     'numeric', rep('factor', 3), rep(datesAs, 2), 'numeric',
+                     'character', rep('factor', 2), rep('character', 5))
 
-colNames <- c('vaersid', 'datereceived', , 'state', 'age', 'ageyears', 'agemonths',
-              'sex', 'reportdate', 'symptoms', 'died', 'datedied',
-              'lifethreateningeffect', 'ervisit', 'hospitalized',
-              'hospitalizeddays', 'prolongedhospitalization', 'disable',
-              'recovered', 
+vaersColNames <- c('vaersid', 'datereceived', , 'state', 'age', 'ageyears',
+                   'agemonths', 'sex', 'reportdate', 'symptoms', 'died',
+                   'datedied', 'lifethreateningeffect', 'ervisit', 'hospitalized',
+                   'hospitalizeddays', 'prolongedhospitalization', 'disable',
+                   'recovered', 'vaccinationdate', ...)
+
+# fread is reading string fields that contain a , as different fields, looks like
+# this is a know issue.
+vaersdata <- as.data.table(read.csv(vaersDataFile, colClasses=colClasses))
+
+# TODO set better column names.
+currentColNames <- names(vaersdata)
+setnames(vaersdata, currentColNames, tolower(gsub('_', '', currentColNames)))
+
+#
+# READING VAERSVAX DATA
+#
+
+vaxDataFile <- 'data/VAERS/2014/2014VAERSVAX.csv'
+vaxColClasses <- c('numeric', 'factor', rep('character', 6))
+vaxColNames <- c('vaersid', 'type', 'manufacturer', 'lot', 'dose', 'route',
+                 'site', 'name')
+vaxdata <- fread(vaxDataFile, colClasses=vaxColClasses)
+setnames(vaxdata, names(vaxdata), vaxColNames)
 
 # According to the VAERS code book, the age fields represent:
 #
@@ -30,13 +52,9 @@ if (ageDifference > 0) {
     print(paste('different in:', ageDifference, 'records'))
 }
 
-# fread is reading string fields that contain a , as different fields, looks like
-# this is a know issue.
-vaersdata <- as.data.table(read.csv(vaersDataFile, colClasses=colClasses))
-
-# TODO set better column names.
-currentColNames <- names(vaersdata)
-setnames(vaersdata, currentColNames, tolower(gsub('_', '', currentColNames)))
+#
+# Reports created by state. What are the states that report the most cases.
+#
 
 totsByState <- vaersdata[,.(tot=.N), .(state)][order(-tot)]
 topTot <- 20
@@ -45,6 +63,7 @@ ggplot(totsByState[1:topTot], aes(state, tot)) +
        labs(title=paste(paste(dataLabel, ': Reports by top', topTot, 'states')))
 
 # Let's select only the top 10 states.
+#
 # TODO. I need to order based on the total. Right now it's ordering by the state
 # and sex since the total by state is divided between male/female/unknown. Probably
 # what I'll need to do is some melt/dcast
@@ -73,5 +92,3 @@ ggplot(ages, aes(agesegment, fill=sex)) +
     labs(title=paste(dataLabel, ': Reports by age.')) +
     labs(x='Age group') +
     labs(y='Total')
-#table(cut(ages$ageyrs, ageBreaks,
-         #labels=breakLabels))
