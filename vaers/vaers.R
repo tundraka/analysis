@@ -36,11 +36,16 @@ setnames(vaersdata, currentColNames, tolower(gsub('_', '', currentColNames)))
 #
 
 vaxDataFile <- 'data/VAERS/2014/2014VAERSVAX.csv'
-vaxColClasses <- c('numeric', 'factor', rep('character', 6))
+vaxColClasses <- c('numeric', 'factor', rep('character', 3), rep('factor', 2),
+                   'character')
 vaxColNames <- c('vaersid', 'type', 'manufacturer', 'lot', 'dose', 'route',
                  'site', 'name')
 vaxdata <- fread(vaxDataFile, colClasses=vaxColClasses)
 setnames(vaxdata, names(vaxdata), vaxColNames)
+
+#
+# PROCESSING
+#
 
 # According to the VAERS code book, the age fields represent:
 #
@@ -71,7 +76,7 @@ ggplot(totsByState[1:topTot], aes(state, tot)) +
 # and sex since the total by state is divided between male/female/unknown. Probably
 # what I'll need to do is some melt/dcast
 topTot <- 10
-totsBySexState <- vaersdata[state==totsByState[1:topTot, .(state)]$state,
+totsBySexState <- vaersdata[state %in% totsByState[1:topTot, .(state)]$state,
                             .(tot=.N),
                             .(state, sex)][order(state, sex)]
 
@@ -95,3 +100,21 @@ ggplot(ages, aes(agesegment, fill=sex)) +
     labs(title=paste(dataLabel, ': Reports by age.')) +
     labs(x='Age group') +
     labs(y='Total')
+
+# What are the vaccines that generated the most reportsc by state
+vaxinfo <- merge(vaersdata[, .(vaersid, state, sex, ageyrs)],
+                 vaxdata[,.(vaersid, type, manufacturer, name)],
+                 by='vaersid')
+topStatesVaxInfo <- vaxinfo[state %in% totsByState[1:topTot, .(state)]$state &
+                            ageyrs < 2.5
+                            .(tot=.N),
+                            .(sex, state, type)]
+# todo, this needs to be refined.
+ggplot(topStatesVaxInfo, aes(state, tot, fill=type)) +
+    geom_bar(stat='identity') +
+    facet_grid(sex ~ .)
+
+# Most commons reported vaccines for <2.5 yrs
+vax25 <- vaxinfo[ageyrs<2.5,.(tot=.N),.(type)][order(-tot)]
+ggplot(vax25[1:10], aes(type, tot)) +
+    geom_bar(stat='identity')
