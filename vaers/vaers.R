@@ -101,7 +101,7 @@ ggplot(ages, aes(agesegment, fill=sex)) +
     labs(x='Age group') +
     labs(y='Total')
 
-# What are the vaccines that generated the most reportsc by state
+# What are the vaccines that generated the most reports by state
 vaxinfo <- merge(vaersdata[, .(vaersid, state, sex, ageyrs)],
                  vaxdata[,.(vaersid, type, manufacturer, name)],
                  by='vaersid')
@@ -114,7 +114,47 @@ ggplot(topStatesVaxInfo, aes(state, tot, fill=type)) +
     geom_bar(stat='identity') +
     facet_grid(sex ~ .)
 
-# Most commons reported vaccines for <2.5 yrs
-vax25 <- vaxinfo[ageyrs<2.5,.(tot=.N),.(type)][order(-tot)]
-ggplot(vax25[1:10], aes(type, tot)) +
-    geom_bar(stat='identity')
+# Most commons reported vaccines for <5 yrs
+
+# If we will be working with ages, let's remove the NAs.
+vaxinfoages <- vaxinfo[!is.na(ageyrs)]
+ageSegments <- cut(vaxinfoages$ageyrs, c(-1, 1, 2.5, 5, 12, 15, 22, 35, 50, 60, 1000))
+vaxinfoages[,agesegment:=ageSegments]
+
+vax25 <- vaxinfoages[ageyrs<=5,
+                 .(tot=.N),
+                 .(type, sex, agesegment)][order(-tot)]
+ggplot(vax25, aes(type, tot, fill=sex)) +
+    geom_bar(stat='identity') +
+    facet_grid(agesegment ~ .) +
+    theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5)) +
+    labs(title=paste(dataLabel, ':<=5 yrs old, vaccines most reported by gender')) +
+    labs(x='Vaccine') +
+    labs(y='Reports/Age group')
+
+vax522 <- vaxinfoages[ageyrs>5 & ageyrs<=22,
+                 .(tot=.N),
+                 .(type, sex, agesegment)][order(-tot)]
+ggplot(vax522, aes(type, tot, fill=sex)) +
+    geom_bar(stat='identity') +
+    facet_grid(agesegment ~ .) +
+    theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5)) +
+    labs(title=paste(dataLabel,
+                     ':22>=age>5 yrs old, vaccines most reported by gender')) +
+    labs(x='Vaccine') +
+    labs(y='Reports/Age group')
+
+vax22p <- vaxinfoages[ageyrs>22,
+                 .(tot=.N),
+                 .(type, sex, agesegment)][order(-tot)]
+ggplot(vax22p, aes(type, tot, fill=sex)) +
+    geom_bar(stat='identity') +
+    facet_grid(agesegment ~ .) +
+    theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5)) +
+    labs(title=paste(dataLabel,
+                     ':>22 yrs old, vaccines most reported by gender')) +
+    labs(x='Vaccine') +
+    labs(y='Reports/Age group')
+
+
+# What are the vaccine reports by age?
