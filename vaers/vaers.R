@@ -43,6 +43,9 @@ vaxColNames <- c('vaersid', 'type', 'manufacturer', 'lot', 'dose', 'route',
 vaxdata <- fread(vaxDataFile, colClasses=vaxColClasses)
 setnames(vaxdata, names(vaxdata), vaxColNames)
 
+# vax types should be all upper case
+vaxdata[,type:=toupper(type)]
+
 #
 # PROCESSING
 #
