@@ -1,0 +1,4 @@
+id,description,regexp,category
+AMZ,amazon,T,shopping
+HEB,heb,T,groceries
+WF,wholefoods,T,groceries

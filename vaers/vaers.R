@@ -159,5 +159,4 @@ ggplot(vax22p, aes(type, tot, fill=sex)) +
     labs(x='Vaccine') +
     labs(y='Reports/Age group')
 
-
 # What are the vaccine reports by age?
