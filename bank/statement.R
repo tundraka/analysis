@@ -43,3 +43,12 @@ classifyItem <- function(description) {
 
 nItems <- nrow(items)
 transactions[,itemid:=sapply(description, classifyItem)]
+
+#
+# Explore
+#
+summary <- merge(transactions[type=='Sale', .(description, amount=amount*-1, itemid)],
+                 items[,.(itemid, category, name)],
+                 by='itemid')
+
+summary[, .(tot=sum(amount), visits=.N), .(name, category)][order(category, -tot)]
