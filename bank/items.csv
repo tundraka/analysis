@@ -7,11 +7,17 @@ GP,genesis,T,groceries,Genesis Pure
 TJ,trader,T,groceries,Trader Joe's
 TRU,toys,T,babies,Toys R Us
 SPE,special,T,babies,Special Addition
+SLE,sleeping,T,babies,Sleeping baby
+FT,fairy,T,babies,Fairytale Threads
 JIB,jack,T,restaurant,Jack in the box
 WAB,whataburger,T,restaurant,Whataburguer
+SBY,subway,T,restaurant,Subway
+MSI,seawall,T,restaurant,Mario's Seawall Italian
 TT,torchys,T,restaurant,Torchy's Tacos
 CHV,chevron,T,car,Chevron
 LAZ,laz,T,car,Laz Parking
 VNG,vonage,T,utilities,Vonage
-ATT,att,T,utilities,AT&T
+ATT,at&t,T,utilities,AT&T
+NFX,netflix,T,utilities,Netflix
+CRS,corner,T,other,Corner Story
 UNK,unknown,F,unknown,Unknown
