@@ -11,7 +11,7 @@ colClasses <- c('factor', rep('character', 3), 'numeric')
 transactions <- as.data.table(read.csv(bankStatementFile, header=T,
                                        colClasses=colClasses))
 
-colClasses <- c('factor', 'character', 'logical', 'factor')
+colClasses <- c('factor', 'character', 'logical', 'factor', 'character')
 items <- fread(itemsFile, header=T, colClasses=colClasses)
 items$itemid <- as.factor(items$itemid)
 items$category <- as.factor(items$category)
@@ -35,12 +35,15 @@ transactions[,itemid:=unknownItem]
 classifyItem <- function(description) {
     for (i in 1:nItems) {
         item <- items[i]
-        if (item$regexp & grepl(item$description, description, ignore.case=F)) {
-            print(items$itemid)
-            return(items$itemid)
+        if (item$regexp & grepl(item$description, description, ignore.case=T)) {
+            return(item$itemid)
         }
     }
+
+    #return(items[itemid=='UNK', itemid])
 }
 
 nItems <- nrow(items)
-transactions[,.(itemid=lapply(description, classifyItem))]
+#transactions[,.(itemid=lapply(description, classifyItem))]
+transactions[,itemid:=lapply(description, classifyItem)]
+#transactions[,itemid:=classifyItem(description)]

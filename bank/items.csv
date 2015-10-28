@@ -1,5 +1,17 @@
-itemid,description,regexp,category
-AMZ,amazon,T,shopping
-HEB,heb,T,groceries
-WF,wholefoods,T,groceries
-UNK,unknown,F,unknown
+itemid,description,regexp,category,name
+AMZ,amazon,T,shopping,Amazon
+HEB,heb,T,groceries,HEB
+WF,wholefds,T,groceries,Whole Foods
+NG,natural,T,groceries,Natural Grocers
+GP,genesis,T,groceries,Genesis Pure
+TJ,trader,T,groceries,Trader Joe's
+TRU,toys,T,babies,Toys R Us
+SPE,special,T,babies,Special Addition
+JIB,jack,T,restaurant,Jack in the box
+WAB,whataburger,T,restaurant,Whataburguer
+TT,torchys,T,restaurant,Torchy's Tacos
+CHV,chevron,T,car,Chevron
+LAZ,laz,T,car,Laz Parking
+VNG,vonage,T,utilities,Vonage
+ATT,att,T,utilities,AT&T
+UNK,unknown,F,unknown,Unknown
