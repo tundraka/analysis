@@ -5,17 +5,22 @@ WF,wholefds,T,groceries,Whole Foods
 NG,natural,T,groceries,Natural Grocers
 GP,genesis,T,groceries,Genesis Pure
 TJ,trader,T,groceries,Trader Joe's
+WM,wm,T,groceries,Wal-Mart
 TRU,toys,T,babies,Toys R Us
 SPE,special,T,babies,Special Addition
 SLE,sleeping,T,babies,Sleeping baby
 FT,fairy,T,babies,Fairytale Threads
 JIB,jack,T,restaurant,Jack in the box
 WAB,whataburger,T,restaurant,Whataburguer
+JJ,jimmy,T,restaurant,Jimmy Johns
+YK,yogurt,T,restaurant,Yogurt King
 SBY,subway,T,restaurant,Subway
 MSI,seawall,T,restaurant,Mario's Seawall Italian
 TT,torchys,T,restaurant,Torchy's Tacos
+RSL,russell,T,restaurant,Russell's
 CHV,chevron,T,car,Chevron
 LAZ,laz,T,car,Laz Parking
+PRK,parking,T,car,Austin Parking Meter
 VNG,vonage,T,utilities,Vonage
 ATT,at&t,T,utilities,AT&T
 NFX,netflix,T,utilities,Netflix

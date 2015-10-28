@@ -13,8 +13,8 @@ transactions <- as.data.table(read.csv(bankStatementFile, header=T,
 
 colClasses <- c('factor', 'character', 'logical', 'factor', 'character')
 items <- fread(itemsFile, header=T, colClasses=colClasses)
-#items$itemid <- as.factor(items$itemid)
-#items$category <- as.factor(items$category)
+items$itemid <- as.factor(items$itemid)
+items$category <- as.factor(items$category)
 
 #
 # SET UP DATA
@@ -31,19 +31,15 @@ transactions$postdate <- as.Date(transactions$postdate, format=dateFormat)
 #
 
 classifyItem <- function(description) {
-    print(length(description))
     for (i in 1:nItems) {
         item <- items[i]
         if (item$regexp & grepl(item$description, description, ignore.case=T)) {
-            print(item$itemid)
-            return(as.character(item$itemid))
+            return(item$itemid)
         }
     }
 
-    as.character('UNK')
+    as.factor('UNK')
 }
 
 nItems <- nrow(items)
-#transactions[,.(itemid=lapply(description, classifyItem))]
-transactions[,itemid:=lapply(description, classifyItem)]
-#transactions[,itemid:=classifyItem(description)]
+transactions[,itemid:=sapply(description, classifyItem)]
