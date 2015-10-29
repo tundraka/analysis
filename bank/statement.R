@@ -7,15 +7,12 @@ itemsFile <- 'bank/items.csv'
 #
 # READING DATA
 #
-colClasses <- c('factor', rep('character', 3), 'numeric')
+colClasses <- c(rep('character', 4), 'numeric')
 transactions <- as.data.table(read.csv(bankStatementFile, header=T,
                                        colClasses=colClasses))
 
 colClasses <- c('factor', 'character', 'logical', 'factor', 'character')
 items <- fread(itemsFile, header=T, colClasses=colClasses)
-items$itemid <- as.factor(items$itemid)
-items$category <- as.factor(items$category)
-nItems <- nrow(items)
 
 #
 # SET UP DATA
@@ -24,8 +21,13 @@ colNames<- c('type', 'date', 'postdate', 'description', 'amount')
 setnames(transactions, names(transactions), colNames)
 
 dateFormat <- '%m/%d/%Y'
-transactions$date <- as.Date(transactions$date, format=dateFormat)
-transactions$postdate <- as.Date(transactions$postdate, format=dateFormat)
+transactions[,date:=as.Date(date, format=dateFormat)]
+transactions[,postdate:=as.Date(postdate, format=dateFormat)]
+transactions[,type:=as.factor(tolower(type))]
+
+items[,itemid:=as.factor(itemid)]
+items[,category:=as.factor(category)]
+nItems <- nrow(items)
 
 #
 # CLEANING DATA
