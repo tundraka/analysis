@@ -21,12 +21,11 @@ colNames<- c('type', 'date', 'postdate', 'description', 'amount')
 setnames(transactions, names(transactions), colNames)
 
 dateFormat <- '%m/%d/%Y'
-transactions[,date:=as.Date(date, format=dateFormat)]
-transactions[,postdate:=as.Date(postdate, format=dateFormat)]
-transactions[,type:=as.factor(tolower(type))]
+transactions[,`:=`(date=as.Date(date, format=dateFormat),
+                   postdate=as.Date(postdate, format=dateFormat),
+                   type=as.factor(tolower(type)))]
 
-items[,itemid:=as.factor(itemid)]
-items[,category:=as.factor(category)]
+items[, c('itemid', 'category'):=list(as.factor(itemid), as.factor(category))]
 nItems <- nrow(items)
 
 #
