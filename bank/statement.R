@@ -1,7 +1,7 @@
 # Bank names are organized like mmyyyy-bankid.csv
 library(data.table)
 
-bankStatementFile <- 'data/bank/092015-1.csv'
+bankStatementFile <- 'data/bank/201509-2.csv'
 itemsFile <- 'bank/items.csv'
 
 #
@@ -15,6 +15,7 @@ colClasses <- c('factor', 'character', 'logical', 'factor', 'character')
 items <- fread(itemsFile, header=T, colClasses=colClasses)
 items$itemid <- as.factor(items$itemid)
 items$category <- as.factor(items$category)
+nItems <- nrow(items)
 
 #
 # SET UP DATA
@@ -41,14 +42,15 @@ classifyItem <- function(description) {
     as.factor('UNK')
 }
 
-nItems <- nrow(items)
 transactions[,itemid:=sapply(description, classifyItem)]
 
 #
 # Explore
 #
-summary <- merge(transactions[type=='Sale', .(description, amount=amount*-1, itemid)],
-                 items[,.(itemid, category, name)],
+summarySales <- merge(transactions[type=='Sale',
+                      .(description, amount=amount*-1, itemid)
+                      ], items[,.(itemid, category, name)],
                  by='itemid')
 
-summary[, .(tot=sum(amount), visits=.N), .(name, category)][order(category, -tot)]
+summarySales[, .(tot=sum(amount), visits=.N), .(name, category)][order(category, -tot)]
+summarySales[, .(tot=sum(amount)), .(category)][order(-tot)]
