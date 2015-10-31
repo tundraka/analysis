@@ -45,6 +45,9 @@ debit[,account:='DEBIT']
 
 transactions <- rbindlist(list(cc1Data, cc2Data, debit))
 
+# Removing temp variables.
+remove(cc1Data, cc2Data, debit)
+
 setnames(transactions, names(transactions), colNames)
 transactions[,`:=`(description=gsub(' +', ' ', description),
                    date=as.Date(date, format=dateFormat),
