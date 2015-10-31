@@ -1,5 +1,6 @@
 # Bank names are organized like mmyyyy-bankid.csv
 library(data.table)
+library(ggplot2)
 
 filePath <- 'data/bank/'
 filePrefix <- '201509-'
@@ -78,7 +79,8 @@ summarySales <- merge(transactions[type=='sale',
                       ], items[,.(itemid, category, name)],
                  by='itemid')
 
-summarySales[, .(tot=sum(amount), visits=.N), .(name, category)][order(category, -tot)]
+summarySales[, .(tot=sum(amount), visits=.N), .(name, category)
+             ][order(category, -tot)]
 summarySales[, .(tot=sum(amount)), .(category)][order(-tot)]
 
 # Some specifics.
@@ -90,6 +92,16 @@ printCategory <- function(cat) {
 cats <- c('groceries', 'restaurant')
 lapply(cats, printCategory)
 
-# TODO draw a boxplot for each day
 txAmountByDate <- summarySales[,.(tot=sum(amount), tx=.N, day=weekdays(date)),
                                .(date)][order(date)]
+txAmountByDate[,.(tot=sum(tot), freq=sum(tx)), .(day)][order(-tot)]
+
+# Draw a boxplot for each day
+txAmountTots <- summarySales[,.(amount, category,
+                                day=as.factor(weekdays(date)))]
+ggplot(txAmountTots, aes(day, amount)) + geom_boxplot()
+ggplot(txAmountTots, aes(category, amount)) + geom_boxplot()
+ggplot(txAmountTots, aes(x=day, y=category, fill=amount)) + geom_bin2d()
+ggplot(txAmountTots, aes(x=day, y=category, fill=amount)) + geom_tile() +
+    scale_fill_gradient(low="green", high="red")
+    
