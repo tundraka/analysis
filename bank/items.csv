@@ -27,13 +27,24 @@ BAC,buenos aires,T,restaurant,Buenos Aires Cafe
 MDL,mandola,T,restaurant,Mandola's
 SNP,snap,T,restaurant,Snap Kitchen
 TB,bell,T,restaurant,Taco Bell
+TC,thundercloud,T,restaurant,Thundercloud Subs
+ZHI,zushi,T,restaurant,Sushi Zushi
+ZOE,zoe,T,restaurant,Zoe's Kitchen
+EPC,epoch,T,restaurant,Epoch Coffee
+PTY,terry,T,restaurant,P Terry's
+BDL,dahlia,T,restaurant,Blue Dahlia's Bistro
+NWK,newk,T,restaurant,Newk's
+MF,mambo,T,restaurant,Mambo Freeze
+MZT,mozart,T,restaurant,Mozart's
 CHV,chevron,T,car,Chevron
 EXX,exxon,T,car,Exxon
 SHL,shell,T,car,Shell
+FTH,first,T,car,First Texas Honda
 LAZ,laz,T,car,Laz Parking
 PRK,parking,T,car,Austin Parking Meter
 VNG,vonage,T,utilities,Vonage
 ATT,at&t,T,utilities,AT&T
 NFX,netflix,T,utilities,Netflix
+WBX,webex,T,utilities,Webex
 USPS,usps,T,other,USPS
 UNK,unknown,F,unknown,Unknown

@@ -73,7 +73,7 @@ transactions[,itemid:=sapply(description, classifyItem)]
 #
 # Explore
 #
-summarySales <- merge(transactions[type=='Sale',
+summarySales <- merge(transactions[type=='sale',
                       .(description, amount=amount*-1, itemid)
                       ], items[,.(itemid, category, name)],
                  by='itemid')
