@@ -80,3 +80,12 @@ summarySales <- merge(transactions[type=='sale',
 
 summarySales[, .(tot=sum(amount), visits=.N), .(name, category)][order(category, -tot)]
 summarySales[, .(tot=sum(amount)), .(category)][order(-tot)]
+
+# Some specifics.
+printCategory <- function(cat) {
+    summarySales[category==cat, .(tot=sum(amount), visits=.N),
+                            .(name)][order(-tot, visits)]
+}
+
+cats <- c('groceries', 'restaurant')
+lapply(cats, printCategory)
