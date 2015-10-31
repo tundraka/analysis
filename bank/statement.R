@@ -74,7 +74,7 @@ transactions[,itemid:=sapply(description, classifyItem)]
 # Explore
 #
 summarySales <- merge(transactions[type=='sale',
-                      .(description, amount=amount*-1, itemid)
+                      .(description, amount=amount*-1, itemid, date)
                       ], items[,.(itemid, category, name)],
                  by='itemid')
 
@@ -84,8 +84,12 @@ summarySales[, .(tot=sum(amount)), .(category)][order(-tot)]
 # Some specifics.
 printCategory <- function(cat) {
     summarySales[category==cat, .(tot=sum(amount), visits=.N),
-                            .(name)][order(-tot, visits)]
+                 .(name)][.(tot, visits, totpvisit=tot/visits)][order(-tot, visits)]
 }
 
 cats <- c('groceries', 'restaurant')
 lapply(cats, printCategory)
+
+# TODO draw a boxplot for each day
+txAmountByDate <- summarySales[,.(tot=sum(amount), tx=.N, day=weekdays(date)),
+                               .(date)][order(date)]
