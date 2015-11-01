@@ -99,9 +99,12 @@ txAmountByDate[,.(tot=sum(tot), freq=sum(tx)), .(day)][order(-tot)]
 # Draw a boxplot for each day
 txAmountTots <- summarySales[,.(amount, category,
                                 day=as.factor(weekdays(date)))]
-ggplot(txAmountTots, aes(day, amount)) + geom_boxplot()
-ggplot(txAmountTots, aes(category, amount)) + geom_boxplot()
-ggplot(txAmountTots, aes(x=day, y=category, fill=amount)) + geom_bin2d()
-ggplot(txAmountTots, aes(x=day, y=category, fill=amount)) + geom_tile() +
+txB <- txAmountTots[,.(tot=sum(amount)), .(day, category)]
+
+ggplot(txB, aes(day, tot)) + geom_boxplot()
+ggplot(txB, aes(category, tot)) + geom_boxplot()
+ggplot(txAmountTots, aes(x=day, y=category)) + geom_bin2d() +
+    scale_fill_gradient(low="green", high="red")
+ggplot(txB, aes(x=day, y=category, fill=tot)) + geom_tile() +
     scale_fill_gradient(low="green", high="red")
     
