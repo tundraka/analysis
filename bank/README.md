@@ -20,7 +20,7 @@ items in the statements.
 
 #tesseract
 I'm trying to keep track of the tickets from my purchases. For that I take
-a picture of the receipt and then use tesseract to extract the text, I'm
+a picture of the receipt and then use [tesseract][3] to extract the text, I'm
 working on a script to transform the output from tesseract into a CSV or some
 other output.
 
@@ -48,3 +48,4 @@ brew install tesseract
 
 [1]: https://gist.github.com/rpavlik/768518
 [2]: http://brew.sh/
+[3]: https://github.com/tesseract-ocr/tesseract
