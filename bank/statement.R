@@ -16,8 +16,14 @@ fileName <- function(actFile) {
 #
 
 itemsFile <- 'bank/items.csv'
+privateItemsFile <- 'bank/private-items.csv'
 colClasses <- c('factor', 'character', 'logical', 'factor', 'character')
-items <- fread(itemsFile, header=T, colClasses=colClasses)
+itemsPublic <- fread(itemsFile, header=T, colClasses=colClasses)
+itemsPrivate <- fread(privateItemsFile, header=T, colClasses=colClasses)
+
+items <- rbindlist(list(itemsPublic, itemsPrivate))
+remove(itemsPublic, itemsPrivate)
+
 items[, c('itemid', 'category'):=list(as.factor(itemid), as.factor(category))]
 nItems <- nrow(items)
 
