@@ -3,7 +3,7 @@ library(data.table)
 library(ggplot2)
 
 filePath <- 'data/bank/'
-filePrefix <- '201509-'
+filePrefix <- '201510-'
 fileExtension <- '.csv'
 dateFormat <- '%m/%d/%Y'
 
@@ -16,7 +16,7 @@ fileName <- function(actFile) {
 #
 
 itemsFile <- 'bank/items.csv'
-privateItemsFile <- 'bank/private-items.csv'
+privateItemsFile <- 'data/bank/private-items.csv'
 colClasses <- c('factor', 'character', 'logical', 'factor', 'character')
 itemsPublic <- fread(itemsFile, header=T, colClasses=colClasses)
 itemsPrivate <- fread(privateItemsFile, header=T, colClasses=colClasses)
@@ -80,37 +80,27 @@ transactions[,itemid:=sapply(description, classifyItem)]
 #
 # Explore
 #
-summarySales <- merge(transactions[type=='sale',
-                      .(description, amount=amount*-1, itemid, date)
-                      ], items[,.(itemid, category, name)],
-                 by='itemid')
+sales <- merge(transactions[type=='sale',
+               .(description, amount=amount*-1, itemid, date, day=weekdays(date))
+               ], items[,.(itemid, category, name)], by='itemid')
 
-summarySales[, .(tot=sum(amount), visits=.N), .(name, category)
-             ][order(category, -tot)]
-summarySales[, .(tot=sum(amount)), .(category)][order(-tot)]
+sales[, .(tot=sum(amount)), .(category)][order(-tot)]
+sales[, .(tot=sum(amount), visits=.N), .(name, category)
+      ][order(category, -tot)]
 
 # Some specifics.
 printCategory <- function(cat) {
-    summarySales[category==cat, .(tot=sum(amount), visits=.N),
-                 .(name)][.(tot, visits, totpvisit=tot/visits)][order(-tot, visits)]
+    sales[category==cat, .(tot=sum(amount), visits=.N),
+                 .(name)][,.(name, tot, visits,
+                             totpvisit=round(tot/visits, digits=2))][
+                 order(-tot, visits)]
 }
 
 cats <- c('groceries', 'restaurant')
 lapply(cats, printCategory)
 
-txAmountByDate <- summarySales[,.(tot=sum(amount), tx=.N, day=weekdays(date)),
-                               .(date)][order(date)]
-txAmountByDate[,.(tot=sum(tot), freq=sum(tx)), .(day)][order(-tot)]
-
-# Draw a boxplot for each day
-txAmountTots <- summarySales[,.(amount, category,
-                                day=as.factor(weekdays(date)))]
-txB <- txAmountTots[,.(tot=sum(amount)), .(day, category)]
-
-ggplot(txB, aes(day, tot)) + geom_boxplot()
-ggplot(txB, aes(category, tot)) + geom_boxplot()
-ggplot(txAmountTots, aes(x=day, y=category)) + geom_bin2d() +
+# Draw a boxplot for each day and category
+ggplot(sales, aes(day, amount)) + geom_boxplot()
+ggplot(sales, aes(category, amount)) + geom_boxplot()
+ggplot(sales, aes(x=day, y=category)) + geom_bin2d() +
     scale_fill_gradient(low="green", high="red")
-ggplot(txB, aes(x=day, y=category, fill=tot)) + geom_tile() +
-    scale_fill_gradient(low="green", high="red")
-    

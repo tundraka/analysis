@@ -7,12 +7,13 @@ GP,genesis,T,groceries,Genesis Pure
 TJ,trader,T,groceries,Trader Joe's
 WM,wm|wal-mart,T,groceries,Wal-Mart
 RDL,randall,T,groceries,Randall's
-MCY,macy,T,groceries,Macy's
+MCY,macy,T,shopping,Macy's
 TRU,toys,T,babies,Toys R Us
 SPE,special,T,babies,Special Addition
 SLE,sleeping,T,babies,Sleeping baby
 FT,fairy,T,babies,Fairytale Threads
 CTS,carters,T,babies,Carters
+KTK,kid,T,babies,Kid to Kid
 JIB,jack,T,restaurant,Jack in the box
 WAB,whataburger,T,restaurant,Whataburguer
 JJ,jimmy,T,restaurant,Jimmy Johns
@@ -36,6 +37,9 @@ BDL,dahlia,T,restaurant,Blue Dahlia's Bistro
 NWK,newk,T,restaurant,Newk's
 MF,mambo,T,restaurant,Mambo Freeze
 MZT,mozart,T,restaurant,Mozart's
+STR,steeping,T,restaurant,The Steeping Room
+TRV,traviata,T,restaurant,La Traviata
+BJS,bjs,T,restaurant,BJ's
 CHV,chevron,T,car,Chevron
 EXX,exxon,T,car,Exxon
 SHL,shell,T,car,Shell
@@ -47,4 +51,5 @@ ATT,at&t,T,utilities,AT&T
 NFX,netflix,T,utilities,Netflix
 WBX,webex,T,utilities,Webex
 USPS,usps,T,other,USPS
+FDX,fedex,T,other,Fedex
 UNK,unknown,F,unknown,Unknown
