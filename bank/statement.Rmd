@@ -20,7 +20,8 @@ This analysis is performed for the period: `r timePeriod`
 
 ## Unknown transactions
 
-The following are unknown transactions.
+The following are unknown transactions. This is a summary of transactions that
+weren't classified and weren't part of this summary.
 
 ```{r unknowntxtable, echo=F, results='asis'}
 xt <- xtable(transactions[itemid=='UNK', .(description, amount, account)])
@@ -28,9 +29,7 @@ print(xt, type='html', include.rownames=F)
 ```
 
 ## Sales transactions
-
-This is a summary of sales transactions that weren't classified and weren't
-part of this summary.
+This transactions refer to what we spent in the CCs.
 
 ```{r salestx, echo=F, results='asis'}
 sales <- merge(transactions[type=='sale',
@@ -41,17 +40,56 @@ xt <- xtable(sales[, .(tot=sum(amount)), .(category)][order(-tot)])
 print(xt, type='html', include.rownames=F)
 ```
 
-#### Groceries
+### Groceries
 Here we are listing the groceries transactions, the visits column indicates how
-many times we went to that story, the column totvisit is just an average of the
+many times we went to that store, the column totvisit is just an average of the
 total by visits.
 
 ```{r groceriesxt,echo=F, results='asis'}
-groceries <- sales[category=='groceries', .(tot=sum(amount), visits=.N),
-                 .(name)][,.(name, tot, visits,
-                             totpvisit=round(tot/visits, digits=2))][
-                 order(-tot, visits)]
+summaryReport <- function(cat) {
+    summary <- sales[category==cat, .(tot=sum(amount), visits=.N),
+                     .(name)][,.(name, tot, visits,
+                                 totpvisit=round(tot/visits, digits=2))][
+                     order(-tot, visits)]
+    xt <- xtable(summary)
+    print(xt, type='html', include.rownames=F)
+}
 
-xt <- xtable(groceries)
-print(xt, type='html', include.rownames=F)
+s('groceries')
+```
+
+### Restaurants
+
+```{r restxt,echo=F, results='asis'}
+summaryReport('restaurant')
+```
+
+### Shopping
+
+```{r shoppingxt,echo=F, results='asis'}
+summaryReport('shopping')
+```
+
+### Babies
+
+```{r babiesxt,echo=F, results='asis'}
+summaryReport('babies')
+```
+
+### Utilities
+
+```{r utilitiesxt,echo=F, results='asis'}
+summaryReport('utilities')
+```
+
+### Car
+
+```{r carsxt,echo=F, results='asis'}
+summaryReport('car')
+```
+
+### Other
+
+```{r otherxt,echo=F, results='asis'}
+summaryReport('other')
 ```
