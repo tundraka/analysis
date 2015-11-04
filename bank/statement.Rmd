@@ -1,4 +1,57 @@
-```{r, echo=F}
-library(data.table)
+---
+title: "Bank statement analysis"
+output: 
+  html_document:
+    keep_md: true
+---
+
+```{r initialize, echo=F}
+timePeriod <- '201510'
+setwd('~/Documents/code/analysis')
+source('bank/transactions.R')
+
 library(ggplot2)
+library(xtable)
+```
+
+## Intro
+
+This analysis is performed for the period: `r timePeriod`
+
+## Unknown transactions
+
+The following are unknown transactions.
+
+```{r unknowntxtable, echo=F, results='asis'}
+xt <- xtable(transactions[itemid=='UNK', .(description, amount, account)])
+print(xt, type='html', include.rownames=F)
+```
+
+## Sales transactions
+
+This is a summary of sales transactions that weren't classified and weren't
+part of this summary.
+
+```{r salestx, echo=F, results='asis'}
+sales <- merge(transactions[type=='sale',
+               .(description, amount=amount*-1, itemid, date, day=weekdays(date))
+               ], items[,.(itemid, category, name)], by='itemid')
+
+xt <- xtable(sales[, .(tot=sum(amount)), .(category)][order(-tot)])
+print(xt, type='html', include.rownames=F)
+```
+
+#### Groceries
+Here we are listing the groceries transactions, the visits column indicates how
+many times we went to that story, the column totvisit is just an average of the
+total by visits.
+
+```{r groceriesxt,echo=F, results='asis'}
+groceries <- sales[category=='groceries', .(tot=sum(amount), visits=.N),
+                 .(name)][,.(name, tot, visits,
+                             totpvisit=round(tot/visits, digits=2))][
+                 order(-tot, visits)]
+
+xt <- xtable(groceries)
+print(xt, type='html', include.rownames=F)
 ```
