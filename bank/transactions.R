@@ -74,4 +74,6 @@ classifyItem <- function(description) {
     as.factor('UNK')
 }
 
-transactions[,itemid:=sapply(description, classifyItem)]
+transactions[, c('itemid', 'day'):=
+             list(sapply(description, classifyItem), weekdays(date))]
+transactions <- merge(transactions, items[,.(itemid, category, name)], by='itemid')

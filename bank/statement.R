@@ -9,9 +9,8 @@ library(ggplot2)
 #
 # Explore
 #
-sales <- merge(transactions[type=='sale',
-               .(description, amount=amount*-1, itemid, date, day=weekdays(date))
-               ], items[,.(itemid, category, name)], by='itemid')
+sales <- transactions[type=='sale',
+                      .(description, category, name, amount=amount*-1, day)]
 
 sales[, .(tot=sum(amount)), .(category)][order(-tot)]
 sales[, .(tot=sum(amount), visits=.N), .(name, category)
