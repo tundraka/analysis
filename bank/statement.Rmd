@@ -18,24 +18,32 @@ library(xtable)
 
 This analysis is performed for the period: `r timePeriod`
 
-## Unknown transactions
+## Sales transactions
+This transactions are what we spent in the CCs.
 
+```{r salestransactions,echo=F}
+sales <- merge(transactions[type=='sale',
+               .(description, amount=amount*-1, itemid, date, day=weekdays(date))
+               ], items[,.(itemid, category, name)], by='itemid')
+```
+
+## Unknown transactions
 The following are unknown transactions. This is a summary of transactions that
 weren't classified and weren't part of this summary.
 
 ```{r unknowntxtable, echo=F, results='asis'}
-xt <- xtable(transactions[itemid=='UNK', .(description, amount, account)])
-print(xt, type='html', include.rownames=F)
+unkTx <- sales[itemid=='UNK', .(description, amount)]
+if (nrow(unkTx) > 0) {
+    xt <- xtable(unkTx)
+    print(xt, type='html', include.rownames=F)
+} else {
+    print('none')
+}
 ```
 
-## Sales transactions
-This transactions refer to what we spent in the CCs.
+#### Summary
 
 ```{r salestx, echo=F, results='asis'}
-sales <- merge(transactions[type=='sale',
-               .(description, amount=amount*-1, itemid, date, day=weekdays(date))
-               ], items[,.(itemid, category, name)], by='itemid')
-
 xt <- xtable(sales[, .(tot=sum(amount)), .(category)][order(-tot)])
 print(xt, type='html', include.rownames=F)
 ```
@@ -134,3 +142,6 @@ xt <- xtable(transactions[category=='recurring',
              .(name=ifelse(name=='Unknown', description, name), amount=-1*amount)])
 print(xt, type='html', include.rownames=F)
 ```
+
+transactions[type %in% c('check', 'debit'), .(total=sum(amount))]
+transactions[type=='credit', .(total=sum(amount))]
