@@ -76,12 +76,6 @@ summaryReport('shopping')
 summaryReport('babies')
 ```
 
-### Utilities
-
-```{r utilitiesxt,echo=F, results='asis'}
-summaryReport('utilities')
-```
-
 ### Car
 
 ```{r carsxt,echo=F, results='asis'}
@@ -92,4 +86,42 @@ summaryReport('car')
 
 ```{r otherxt,echo=F, results='asis'}
 summaryReport('other')
+```
+
+## Other transactions
+
+### Utilities
+
+```{r utilitiesxt,echo=F, results='asis'}
+xt <- xtable(transactions[category=='utilities',
+             .(name=ifelse(name=='Unknown', description, name), amount=-1*amount)])
+print(xt, type='html', include.rownames=F)
+```
+
+### Returns
+```{r returnsxt, echo=F, results='asis'}
+xt <- xtable(transactions[type=='return',
+             .(name=ifelse(name=='Unknown', description, name), amount)])
+print(xt, type='html', include.rownames=F)
+```
+
+### Payments
+```{r paymentsxt, echo=F, results='asis'}
+xt <- xtable(transactions[type=='payment',
+             .(name=ifelse(name=='Unknown', description, name), amount, account)])
+print(xt, type='html', include.rownames=F)
+```
+
+### Credits
+```{r creditsxt, echo=F, results='asis'}
+xt <- xtable(transactions[type=='credit',
+             .(name=ifelse(name=='Unknown', description, name) , amount)])
+print(xt, type='html', include.rownames=F)
+```
+
+### Recurring payments
+```{r creditsxt, echo=F, results='asis'}
+xt <- xtable(transactions[category=='recurring',
+             .(name=ifelse(name=='Unknown', description, name), amount=-1*amount)])
+print(xt, type='html', include.rownames=F)
 ```
