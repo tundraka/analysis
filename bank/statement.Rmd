@@ -119,8 +119,17 @@ xt <- xtable(transactions[type=='credit',
 print(xt, type='html', include.rownames=F)
 ```
 
+### Withdraw
+```{r withdrawxt, echo=F, results='asis'}
+xt <- xtable(transactions[category=='withdraw',
+             .(cdate=as.character(date), name=ifelse(name=='Unknown', description, name)
+               , amount=-1*amount)][order(cdate)])
+print(xt, type='html', include.rownames=F)
+```
+
+
 ### Recurring payments
-```{r creditsxt, echo=F, results='asis'}
+```{r recurringxt, echo=F, results='asis'}
 xt <- xtable(transactions[category=='recurring',
              .(name=ifelse(name=='Unknown', description, name), amount=-1*amount)])
 print(xt, type='html', include.rownames=F)
