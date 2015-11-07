@@ -147,5 +147,5 @@ transactions[type %in% c('check', 'debit') && category != 'saving',
             .(total=sum(amount))]
 transactions[type=='credit', .(total=sum(amount))]
 transactions[category=='recurring', .(total=sum(amount))]
-# recurring minus dual income extras
+# recurring minus income extras
 transactions[category=='recurring' & !(itemid %in% c('AF', 'PB')), .(total=sum(amount))]
