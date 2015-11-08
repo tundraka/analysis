@@ -14,6 +14,9 @@ fileName <- function(actFile) {
 # READING DATA
 #
 
+readStatements <- function(period) {
+}
+
 itemsFile <- 'bank/items.csv'
 privateItemsFile <- 'data/bank/private-items.csv'
 colClasses <- c('factor', 'character', 'logical', 'factor', 'character')
