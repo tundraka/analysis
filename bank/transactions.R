@@ -14,8 +14,7 @@ fileName <- function(actFile) {
 # READING DATA
 #
 
-readStatements <- function(period) {
-}
+# ITEMS
 
 itemsFile <- 'bank/items.csv'
 privateItemsFile <- 'data/bank/private-items.csv'
@@ -29,9 +28,12 @@ remove(itemsPublic, itemsPrivate)
 items[, c('itemid', 'category'):=list(as.factor(itemid), as.factor(category))]
 nItems <- nrow(items)
 
+# STATEMENTS
+
 # Col names/classes for the CC statements
 colNames<- c('type', 'date', 'description', 'amount', 'account')
-colClasses <- c(rep('character', 4), 'numeric')
+debitClasses <- c(rep('character', 4), 'numeric')
+ccClasses <- c(rep('character', 3), 'numeric', rep('character', 4))
 
 # The col selected are:
 # 1: Type
@@ -40,27 +42,32 @@ colClasses <- c(rep('character', 4), 'numeric')
 # 5: Amount
 colSelected <- c(1, 2, 4, 5)
 
-# Reading both CC statements
-cc1Data <- fread(fileName(1), header=T, colClasses=colClasses, select=colSelected)
-cc1Data[,account:='CC1']
+readStatements <- function(period) {
+    # Reading both CC statements
+    cc1Data <- fread(fileName(period, 1), header=T, colClasses=ccClasses,
+                     select=colSelected)
+    cc1Data[,account:='CC1']
 
-cc2Data <- fread(fileName(2), header=T, colClasses=colClasses, select=colSelected)
-cc2Data[,account:='CC2']
+    cc2Data <- fread(fileName(period, 2), header=T, colClasses=ccClasses,
+                     select=colSelected)
+    cc2Data[,account:='CC2']
 
-# Reading the debit account statement
-colClasses <- c(rep('character', 3), 'numeric', rep('character', 4))
-debit <- fread(fileName(3), header=T, colClasses=colClasses, select=1:4)
-debit[,account:='DEBIT']
+    # Reading the debit account statement
+    debit <- fread(fileName(3), header=T, colClasses=debClasses, select=1:4)
+    debit[,account:='DEBIT']
 
-transactions <- rbindlist(list(cc1Data, cc2Data, debit))
+    transactions <- rbindlist(list(cc1Data, cc2Data, debit))
 
-# Removing temp variables.
-remove(cc1Data, cc2Data, debit)
+    # Removing temp variables.
+    remove(cc1Data, cc2Data, debit)
 
-setnames(transactions, names(transactions), colNames)
-transactions[,`:=`(description=gsub(' +', ' ', description),
-                   date=as.Date(date, format=dateFormat),
-                   type=as.factor(tolower(type)))]
+    setnames(transactions, names(transactions), colNames)
+    transactions[,`:=`(description=gsub(' +', ' ', description),
+                       date=as.Date(date, format=dateFormat),
+                       type=as.factor(tolower(type)))]
+
+    return(transactions)
+}
 
 #
 # CLASSIFYING DATA
