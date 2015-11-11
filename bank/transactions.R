@@ -11,11 +11,12 @@ statement <- function(timePeriod) {
         dateFormat = '%m/%d/%Y'
     )
 
-    conf <- function(newConf) {
-    }
-
     fileName <- function(acctFile) {
-        paste0(filePath, filePrefix, acctFile, configuration$extension)
+        paste0(
+               configuration$filePath,
+               configuration$filePrefix,
+               acctFile,
+               configuration$extension)
     }
 
     # Col names/classes for the CC/debit statements
@@ -30,13 +31,13 @@ statement <- function(timePeriod) {
     # 5: Amount
     ccColSelected <- c(1, 2, 4, 5)
 
-    readStatements <- function(period) {
+    readStatements <- function() {
         # Reading both CC statements
-        cc1Data <- fread(fileName(period, 1), header=T, colClasses=ccClasses,
+        cc1Data <- fread(fileName(1), header=T, colClasses=ccClasses,
                          select=ccColSelected)
         cc1Data[,account:='CC1']
 
-        cc2Data <- fread(fileName(period, 2), header=T, colClasses=ccClasses,
+        cc2Data <- fread(fileName(2), header=T, colClasses=ccClasses,
                          select=ccColSelected)
         cc2Data[,account:='CC2']
 
@@ -51,14 +52,13 @@ statement <- function(timePeriod) {
 
         setnames(transactions, names(transactions), colNames)
         transactions[,`:=`(description=gsub(' +', ' ', description),
-                           date=as.Date(date, format=dateFormat),
+                           date=as.Date(date, format=configuration$dateFormat),
                            type=as.factor(tolower(type)))]
 
         return(transactions)
     }
 
     list(
-         conf=conf
          fileName=fileName,
          readStatements=readStatements
     )
