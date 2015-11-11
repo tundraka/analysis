@@ -19,37 +19,36 @@ statement <- function(timePeriod) {
                configuration$extension)
     }
 
-    # Col names/classes for the CC/debit statements
-    colNames<- c('type', 'date', 'description', 'amount', 'account')
-    debitClasses <- c(rep('character', 4), 'numeric')
-    ccClasses <- c(rep('character', 3), 'numeric', rep('character', 4))
-
-    # The col selected are:
-    # 1: Type
-    # 2: Transaction date
-    # 4: Description
-    # 5: Amount
-    ccColSelected <- c(1, 2, 4, 5)
-
     readStatements <- function() {
-        # Reading both CC statements
-        cc1Data <- fread(fileName(1), header=T, colClasses=ccClasses,
-                         select=ccColSelected)
-        cc1Data[,account:='CC1']
 
-        cc2Data <- fread(fileName(2), header=T, colClasses=ccClasses,
-                         select=ccColSelected)
-        cc2Data[,account:='CC2']
+        readFile <- function(fileName, classes, cols, label) {
+            data <- fread(fileName, header=T, colClasses=classes, select=cols)
+            data[,account:=label]
 
-        # Reading the debit account statement
-        debit <- fread(fileName(3), header=T, colClasses=debClasses, select=1:4)
-        debit[,account:='DEBIT']
+            data
+        }
 
-        transactions <- rbindlist(list(cc1Data, cc2Data, debit))
+        # Col names/classes for the CC/debit statements
+        debClasses <- c(rep('character', 4), 'numeric')
+        ccClasses <- c(rep('character', 3), 'numeric', rep('character', 4))
+
+        # The col selected are:
+        # 1: Type
+        # 2: Transaction date
+        # 4: Description
+        # 5: Amount
+        ccColSelected <- c(1, 2, 4, 5)
+
+        cc1 <- readFile(fileName(1), ccClasses, ccColSelected, 'CC1')
+        cc2 <- readFile(fileName(2), ccClasses, ccColSelected, 'CC2')
+        debit <- readFile(fileName(3), debClasses, 1:4, 'DEBIT')
+
+        transactions <- rbindlist(list(cc1, cc2, debit))
 
         # Removing temp variables.
-        remove(cc1Data, cc2Data, debit)
+        remove(cc1, cc2, debit)
 
+        colNames<- c('type', 'date', 'description', 'amount', 'account')
         setnames(transactions, names(transactions), colNames)
         transactions[,`:=`(description=gsub(' +', ' ', description),
                            date=as.Date(date, format=configuration$dateFormat),
