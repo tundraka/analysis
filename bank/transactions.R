@@ -29,8 +29,8 @@ statement <- function(timePeriod) {
         }
 
         # Col names/classes for the CC/debit statements
-        debClasses <- c(rep('character', 4), 'numeric')
-        ccClasses <- c(rep('character', 3), 'numeric', rep('character', 4))
+        debClasses <- c(rep('character', 3), 'numeric', rep('character', 4))
+        ccClasses <- c(rep('character', 4), 'numeric');
 
         # The col selected are:
         # 1: Type
