@@ -6,6 +6,9 @@ source('bank/transactions.R')
 
 library(ggplot2)
 
+statementLoader <- statement(timePeriod)
+transactions <- statementLoader$readStatements()
+
 #
 # Explore
 #
