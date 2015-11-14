@@ -6,6 +6,7 @@ source('bank/transactions.R')
 
 library(ggplot2)
 
+# TODO Load the list of time periods
 statementLoader <- statement(timePeriod)
 transactions <- statementLoader$readStatements()
 
