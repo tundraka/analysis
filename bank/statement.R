@@ -14,8 +14,8 @@ library(ggplot2)
 # files, read the columns X, Y, Z, and so on keep adding specifics, but a generic
 # way cannot be defined, unless I impose that a pattern, put things here, name
 # them like this, make sure this column represents this, and so on.
-statementLoader <- statement(timePeriod)
-transactions <- statementLoader$readStatements()
+statementLoader <- statement()
+transactions <- statementLoader$readStatements(timePeriod)
 
 #
 # Explore

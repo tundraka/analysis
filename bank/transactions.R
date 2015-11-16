@@ -1,17 +1,16 @@
 # Bank names are organized like mmyyyy-bankid.csv
 library(data.table)
 
-statement <- function(timePeriod) {
-    # TODO. validate timePeriod
+statement <- function() {
+    dateFormat = '%m/%d/%Y'
 
-    configuration <- list(
-        filePath = 'data/bank/',
-        filePrefix = paste0(timePeriod, '-'),
-        extension = '.csv',
-        dateFormat = '%m/%d/%Y'
-    )
+    fileName <- function(timePeriod, acctFile) {
+        configuration <- list(
+            filePath = 'data/bank/',
+            filePrefix = paste0(timePeriod, '-'),
+            extension = '.csv'
+        )
 
-    fileName <- function(acctFile) {
         paste0(
                configuration$filePath,
                configuration$filePrefix,
@@ -19,7 +18,7 @@ statement <- function(timePeriod) {
                configuration$extension)
     }
 
-    readStatements <- function() {
+    readStatements <- function(timePeriod) {
 
         readFile <- function(fileName, classes, cols, label) {
             data <- fread(fileName, header=T, colClasses=classes, select=cols)
@@ -39,9 +38,9 @@ statement <- function(timePeriod) {
         # 5: Amount
         ccColSelected <- c(1, 2, 4, 5)
 
-        cc1 <- readFile(fileName(1), ccClasses, ccColSelected, 'CC1')
-        cc2 <- readFile(fileName(2), ccClasses, ccColSelected, 'CC2')
-        debit <- readFile(fileName(3), debClasses, 1:4, 'DEBIT')
+        cc1 <- readFile(fileName(timePeriod, 1), ccClasses, ccColSelected, 'CC1')
+        cc2 <- readFile(fileName(timePeriod, 2), ccClasses, ccColSelected, 'CC2')
+        debit <- readFile(fileName(timePeriod, 3), debClasses, 1:4, 'DEBIT')
 
         transactions <- rbindlist(list(cc1, cc2, debit))
 
@@ -51,7 +50,7 @@ statement <- function(timePeriod) {
         colNames<- c('type', 'date', 'description', 'amount', 'account')
         setnames(transactions, names(transactions), colNames)
         transactions[,`:=`(description=gsub(' +', ' ', description),
-                           date=as.Date(date, format=configuration$dateFormat),
+                           date=as.Date(date, format=dateFormat),
                            type=as.factor(tolower(type)))]
 
         return(transactions)
