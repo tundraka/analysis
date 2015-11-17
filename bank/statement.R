@@ -1,8 +1,6 @@
-# timePeriod will be use by transactions.R to select the statements for that period
-# the format is YYYYMM
-timePeriod <- '201510'
 # statement.R will do the data loading.
 source('bank/transactions.R')
+source('bank/classification.R')
 
 library(ggplot2)
 
@@ -15,7 +13,10 @@ library(ggplot2)
 # way cannot be defined, unless I impose that a pattern, put things here, name
 # them like this, make sure this column represents this, and so on.
 statementLoader <- statement()
-transactions <- statementLoader$readStatements(timePeriod)
+classifier <- classification()
+
+transactions <- statementLoader$readStatements('201510')
+transactions <- classifier$classify(transactions)
 
 #
 # Explore

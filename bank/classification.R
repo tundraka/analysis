@@ -1,33 +1,59 @@
 # ITEMS
 
-itemsFile <- 'bank/items.csv'
-privateItemsFile <- 'data/bank/private-items.csv'
-colClasses <- c('factor', 'character', 'logical', 'factor', 'character')
-itemsPublic <- fread(itemsFile, header=T, colClasses=colClasses)
-itemsPrivate <- fread(privateItemsFile, header=T, colClasses=colClasses)
+classification <- function() {
+    config <- list(
+        itemsFile = 'bank/items.csv',
+        privateItemsFile = 'data/bank/private-items.csv',
+        colClasses = c('factor', 'character', 'logical', 'factor', 'character')
+    )
 
-items <- rbindlist(list(itemsPublic, itemsPrivate))
-remove(itemsPublic, itemsPrivate)
+    items <- list(
+        items = NULL,
+        total = NULL
+    )
 
-items[, c('itemid', 'category'):=list(as.factor(itemid), as.factor(category))]
-nItems <- nrow(items)
-
-#
-# CLASSIFYING DATA
-#
-
-classifyItem <- function(description) {
-    for (i in 1:nItems) {
-        item <- items[i]
-        if (item$regexp & grepl(item$description, description, ignore.case=T)) {
-            return(item$itemid)
+    classifyItem <- function(description) {
+        for (i in 1:items$total) {
+            item <- items$items[i]
+            if (item$regexp & grepl(item$description, description, ignore.case=T)) {
+                return(item$itemid)
+            }
         }
+
+        as.factor('UNK')
     }
 
-    as.factor('UNK')
+    loadItems <- function() {
+        print(config$itemsFile)
+        items <- rbindlist(list(
+            fread(config$itemsFile, header=T, colClasses=config$colClasses),
+            fread(config$privateItemsFile, header=T, colClasses=config$colClasses)
+        ))
+
+        items[, c('itemid', 'category'):=list(as.factor(itemid),
+                                              as.factor(category))]
+        items$items <<- items
+        items$total <<- nrow(items)
+
+        remove(items)
+    }
+
+    classify <- function(transactions) {
+        if (is.null(items$items)) loadItems()
+
+        transactions[, c('itemid', 'day'):=list(
+                            sapply(description, classifyItem), weekdays(date))]
+        print(class(transactions))
+        print(class(items$items))
+
+        transactions <- merge(transactions,
+                              items$items[,.(itemid, category, name)],
+                              by='itemid')
+
+        return(transactions)
+    }
+
+    return(list(
+        classify=classify
+    ))
 }
-
-transactions[, c('itemid', 'day'):=
-             list(sapply(description, classifyItem), weekdays(date))]
-transactions <- merge(transactions, items[,.(itemid, category, name)], by='itemid')
-
