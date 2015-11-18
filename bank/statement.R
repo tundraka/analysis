@@ -18,6 +18,7 @@ classifier <- classification()
 transactions <- statementLoader$readStatements('201510')
 transactions <- classifier$classify(transactions)
 
+# list.files('data/bank', pattern="*.csv", all.files = TRUE, full.names = TRUE)
 #
 # Explore
 #
