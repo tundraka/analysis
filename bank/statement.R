@@ -15,6 +15,18 @@ library(ggplot2)
 statementLoader <- statement()
 classifier <- classification()
 
+files <- list(
+    DEBIT = list(
+        cols=c(rep('character', 3), 'numeric', rep('character', 4)),
+        sel=1:4),
+    CC1 = list(
+        cols=c(rep('character', 4), 'numeric')
+        sel=c(1, 2, 4, 5)),
+    CC2 = list(
+        cols=c(rep('character', 4), 'numeric')
+        sel=c(1, 2, 4, 5))
+    )
+
 transactions <- statementLoader$readStatements('201510')
 transactions <- classifier$classify(transactions)
 
