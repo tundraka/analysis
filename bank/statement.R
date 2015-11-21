@@ -40,8 +40,10 @@ readTransactions <- function(fileName) {
 
     transactions <<- rbind(transactions, trx)
 }
-files <- list.files('data/bank/2015/08', pattern="*.csv", all.files=T,
-                    full.names=T)
+
+files <- list.files('data/bank/2015', all.files=T, full.names=T, recursive=T)
+files <- files[grep('*/0[89]/*', files)]
+
 transactions <- data.table()
 lapply(files, readTransactions)
 
