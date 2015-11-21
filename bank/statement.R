@@ -38,12 +38,12 @@ readTransactions <- function(fileName) {
         print(paste('unable to read file', fileName))
     }
 
-    trx
+    transactions <<- rbind(transactions, trx)
 }
 files <- list.files('data/bank/2015/08', pattern="*.csv", all.files=T,
                     full.names=T)
 transactions <- data.table()
-tranasctions <- lapply(files, readTransactions)
+lapply(files, readTransactions)
 
 #transactions <- statementLoader$readStatements('201510')
 #transactions <- classifier$classify(transactions)
