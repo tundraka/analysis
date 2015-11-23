@@ -11,21 +11,9 @@ library(xtable)
 
 setwd('~/Documents/code/analysis')
 
-source('bank/transactions.R')
-source('bank/classification.R')
-source('bank/fileconf.R')
-
+source('bank/init.R')
 timePeriod <- '2015/10'
-
-statementLoader <- statement()
-classifier <- classification()
-
-files <- list.files(paste0('data/bank/', timePeriod), all.files=T, full.names=T,
-                    pattern='*.csv')
-
-transactions <- data.table()
-lapply(files, readTransactions)
-transactions <- classifier$classify(transactions)
+transactions <- initialize(paste0('data/bank/', timePeriod), '*.csv')
 
 ```
 
