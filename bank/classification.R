@@ -25,7 +25,6 @@ classification <- function() {
     }
 
     loadItems <- function() {
-        print(config$itemsFile)
         items <- rbindlist(list(
             fread(config$itemsFile, header=T, colClasses=config$colClasses),
             fread(config$privateItemsFile, header=T, colClasses=config$colClasses)
@@ -44,9 +43,6 @@ classification <- function() {
 
         transactions[, c('itemid', 'day'):=list(
                             sapply(description, classifyItem), weekdays(date))]
-        print(class(transactions))
-        print(class(items$items))
-
         transactions <- merge(transactions,
                               items$items[,.(itemid, category, name)],
                               by='itemid')
