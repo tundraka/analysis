@@ -6,18 +6,32 @@ output:
 ---
 
 ```{r initialize, echo=F}
-timePeriod <- '201510'
-setwd('~/Documents/code/analysis')
-source('bank/transactions.R')
-
 library(ggplot2)
 library(xtable)
+
+setwd('~/Documents/code/analysis')
+
+source('bank/transactions.R')
+source('bank/classification.R')
+source('bank/fileconf.R')
+
+timePeriod <- '2015/10'
+
+statementLoader <- statement()
+classifier <- classification()
+
+files <- list.files(paste0('data/bank/', timePeriod), all.files=T, full.names=T,
+                    pattern='*.csv')
+
+transactions <- data.table()
+lapply(files, readTransactions)
+transactions <- classifier$classify(transactions)
+
 ```
 
 ## Intro
 
-This analysis is performed for the period: `r timePeriod`
-
+This analysis is performed for the period: `r timePeriod` 
 ## Sales transactions
 This transactions are what we spent in the CCs.
 
