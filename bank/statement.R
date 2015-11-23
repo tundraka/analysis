@@ -13,14 +13,10 @@ library(ggplot2)
 # files, read the columns X, Y, Z, and so on keep adding specifics, but a generic
 # way cannot be defined, unless I impose that a pattern, put things here, name
 # them like this, make sure this column represents this, and so on.
-statementLoader <- statement()
+statements <- statement('data/bank/2015', '*/0[89]/*')
 classifier <- classification()
 
-files <- list.files('data/bank/2015', all.files=T, full.names=T, recursive=T)
-files <- files[grep('*/0[89]/*', files)]
-
-transactions <- data.table()
-lapply(files, readTransactions)
+transactions <- statements$load()
 transactions <- classifier$classify(transactions)
 
 # 
