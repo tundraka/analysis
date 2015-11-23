@@ -1,9 +1,12 @@
 # Bank names are organized like mmyyyy-bankid.csv
 library(data.table)
 
+source('bank/modules/fileconf.R')
+
 statement <- function(path, filesExp) {
     dateFormat = '%m/%d/%Y'
     transactions <- data.table()
+    FileConf <- FileConfiguration()
 
     readStatements <- function(fileName, conf, acct) {
 
@@ -32,8 +35,10 @@ statement <- function(path, filesExp) {
         fileNameParts <- unlist(strsplit(basename(fileName), "\\."))
         if (length(fileNameParts) == 2) {
             acct <- fileNameParts[1]
-            conf <- fileConf[[acct]]
-            trx <- readStatements(fileName, conf, acct)
+            conf <- FileConf$getFileConf(acct)
+            if (! is.null(conf)) {
+                trx <- readStatements(fileName, conf, acct)
+            }
         } else {
             print(paste('unable to read file', fileName))
         }
