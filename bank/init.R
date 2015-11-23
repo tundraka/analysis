@@ -1,5 +1,5 @@
-source('bank/transactions.R')
-source('bank/classification.R')
+source('bank/modules/transactions.R')
+source('bank/modules/classification.R')
 source('bank/fileconf.R')
 
 # TODO Load the list of time periods
