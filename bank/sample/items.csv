@@ -1,0 +1,4 @@
+itemid,description,regexp,category,name
+AMZ,amazon,T,shopping,Amazon
+WF,wholefds,T,groceries,Whole Foods
+
