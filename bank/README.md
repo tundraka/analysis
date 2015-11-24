@@ -4,10 +4,11 @@ I look into, that's why the `statement.R` script loads three files.
 
 ##Items
 The items CSV file will contain a 'table' that allows the classification of the
-items in the statements. Aside from the items.csv under the `bank/` directory,
-I also have the same file under the `data/` directory, the file name is
+items in the statements. Aside from the items.csv under the `bank/data` directory,
+I also have the same file under the same `bank/data` directory, the file name is
 `private-items.csv` and I put there information that I consider private and
-shouldn't hit github.
+shouldn't hit github. You can look at a sample `items.csv` under the `sample/`
+directory.
 
 ####Databook
 1. `itemid`: the id for the company

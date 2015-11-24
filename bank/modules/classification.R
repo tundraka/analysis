@@ -2,8 +2,8 @@
 
 classification <- function() {
     config <- list(
-        itemsFile = 'bank/items.csv',
-        privateItemsFile = 'data/bank/private-items.csv',
+        itemsFile = 'bank/data/items.csv',
+        privateItemsFile = 'bank/data/private-items.csv',
         colClasses = c('factor', 'character', 'logical', 'factor', 'character')
     )
 
