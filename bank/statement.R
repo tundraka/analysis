@@ -1,4 +1,5 @@
 # init.R will do the data loading.
+setwd('~/Documents/code/analysis')
 library(ggplot2)
 
 source('bank/init.R')

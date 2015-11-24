@@ -3,15 +3,17 @@ title: "Bank statement analysis"
 output: 
   html_document:
     keep_md: true
+    theme: united
+  pdf_document:
+    toc: true
+    highlight: zenburn
 ---
 
 ```{r initialize, echo=F}
 library(ggplot2)
 library(xtable)
 
-setwd('~/Documents/code/analysis')
-
-source('bank/init.R')
+source('./init.R')
 timePeriod <- '2015/10'
 transactions <- initialize(paste0('data/bank/', timePeriod), '*.csv')
 
