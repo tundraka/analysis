@@ -13,6 +13,8 @@ output:
 library(ggplot2)
 library(xtable)
 
+opts_chunk$set(echo=FALSE, results="asis")
+
 source('./init.R')
 timePeriod <- '2015/10'
 transactions <- initialize(paste0('data/bank/', timePeriod), '*.csv')
@@ -25,7 +27,7 @@ This analysis is performed for the period: `r timePeriod`
 ## Sales transactions
 This transactions are what we spent in the CCs.
 
-```{r salestransactions,echo=F}
+```{r salestransactions}
 sales <- merge(transactions[type=='sale',
                .(description, amount=amount*-1, itemid, date, day=weekdays(date))
                ], items[,.(itemid, category, name)], by='itemid')
@@ -35,7 +37,7 @@ sales <- merge(transactions[type=='sale',
 The following are unknown transactions. This is a summary of transactions that
 weren't classified and weren't part of this summary.
 
-```{r unknowntxtable, echo=F, results='asis'}
+```{r unknowntxtable, results='asis'}
 unkTx <- sales[itemid=='UNK', .(description, amount)]
 if (nrow(unkTx) > 0) {
     xt <- xtable(unkTx)
@@ -47,7 +49,7 @@ if (nrow(unkTx) > 0) {
 
 #### Summary
 
-```{r salestx, echo=F, results='asis'}
+```{r salestx, results='asis'}
 xt <- xtable(sales[, .(tot=sum(amount)), .(category)][order(-tot)])
 print(xt, type='html', include.rownames=F)
 ```
@@ -57,7 +59,7 @@ Here we are listing the groceries transactions, the visits column indicates how
 many times we went to that store, the column totvisit is just an average of the
 total by visits.
 
-```{r groceriesxt,echo=F, results='asis'}
+```{r groceriesxt, results='asis'}
 summaryReport <- function(cat) {
     summary <- sales[category==cat, .(tot=sum(amount), visits=.N),
                      .(name)][,.(name, tot, visits,
@@ -72,31 +74,31 @@ s('groceries')
 
 ### Restaurants
 
-```{r restxt,echo=F, results='asis'}
+```{r restxt, results='asis'}
 summaryReport('restaurant')
 ```
 
 ### Shopping
 
-```{r shoppingxt,echo=F, results='asis'}
+```{r shoppingxt, results='asis'}
 summaryReport('shopping')
 ```
 
 ### Babies
 
-```{r babiesxt,echo=F, results='asis'}
+```{r babiesxt, results='asis'}
 summaryReport('babies')
 ```
 
 ### Car
 
-```{r carsxt,echo=F, results='asis'}
+```{r carsxt, results='asis'}
 summaryReport('car')
 ```
 
 ### Other
 
-```{r otherxt,echo=F, results='asis'}
+```{r otherxt, results='asis'}
 summaryReport('other')
 ```
 
@@ -104,35 +106,35 @@ summaryReport('other')
 
 ### Utilities
 
-```{r utilitiesxt,echo=F, results='asis'}
+```{r utilitiesxt, results='asis'}
 xt <- xtable(transactions[category=='utilities',
              .(name=ifelse(name=='Unknown', description, name), amount=-1*amount)])
 print(xt, type='html', include.rownames=F)
 ```
 
 ### Returns
-```{r returnsxt, echo=F, results='asis'}
+```{r returnsxt, results='asis'}
 xt <- xtable(transactions[type=='return',
              .(name=ifelse(name=='Unknown', description, name), amount)])
 print(xt, type='html', include.rownames=F)
 ```
 
 ### Payments
-```{r paymentsxt, echo=F, results='asis'}
+```{r paymentsxt, results='asis'}
 xt <- xtable(transactions[type=='payment',
              .(name=ifelse(name=='Unknown', description, name), amount, account)])
 print(xt, type='html', include.rownames=F)
 ```
 
 ### Credits
-```{r creditsxt, echo=F, results='asis'}
+```{r creditsxt, results='asis'}
 xt <- xtable(transactions[type=='credit',
              .(name=ifelse(name=='Unknown', description, name) , amount)])
 print(xt, type='html', include.rownames=F)
 ```
 
 ### Withdraw
-```{r withdrawxt, echo=F, results='asis'}
+```{r withdrawxt, results='asis'}
 xt <- xtable(transactions[category=='withdraw',
              .(cdate=as.character(date), name=ifelse(name=='Unknown', description, name)
                , amount=-1*amount)][order(cdate)])
@@ -141,7 +143,7 @@ print(xt, type='html', include.rownames=F)
 
 
 ### Recurring payments
-```{r recurringxt, echo=F, results='asis'}
+```{r recurringxt, results='asis'}
 xt <- xtable(transactions[category=='recurring',
              .(name=ifelse(name=='Unknown', description, name), amount=-1*amount)])
 print(xt, type='html', include.rownames=F)
