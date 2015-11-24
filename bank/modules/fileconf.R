@@ -21,7 +21,7 @@ FileConfiguration <- function() {
         conf
     }
 
-    return list(
+    list(
         getFileConf=getFileConf
     )
 }

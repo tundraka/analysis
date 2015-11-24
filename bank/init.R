@@ -1,6 +1,5 @@
 source('bank/modules/transactions.R')
 source('bank/modules/classification.R')
-source('bank/fileconf.R')
 
 # TODO Load the list of time periods
 # Event though I try to make this generic, like specifyng where the data is, what
