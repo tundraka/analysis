@@ -50,6 +50,18 @@ ruby fix_homebrew.rb
 brew install tesseract
 ```
 
+### Running
+
+`outputfile` extension `.txt` is added by `tesseract` automatically.
+
+```bash
+tesseract image.png outputfile -psm 6
+
+-psm pagesegmode
+pagesegmode values are:
+  6 = Assume a single uniform block of text.
+```
+
 [1]: https://gist.github.com/rpavlik/768518
 [2]: http://brew.sh/
 [3]: https://github.com/tesseract-ocr/tesseract
