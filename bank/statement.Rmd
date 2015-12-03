@@ -17,8 +17,10 @@ opts_chunk$set(echo=FALSE, results="asis")
 
 source('./init.R')
 timePeriod <- '2015/10'
-transactions <- initialize(paste0('data/bank/', timePeriod), '*.csv')
+transactions <- initialize(paste0('./data/bank/', timePeriod), '*.csv')
 
+
+transactions
 ```
 
 ## Intro

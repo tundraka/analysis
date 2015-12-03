@@ -1,7 +1,7 @@
 # Bank names are organized like mmyyyy-bankid.csv
 library(data.table)
 
-source('bank/modules/fileconf.R')
+source('./modules/fileconf.R')
 
 statement <- function(path, filesExp) {
     dateFormat = '%m/%d/%Y'
