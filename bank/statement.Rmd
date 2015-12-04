@@ -35,7 +35,7 @@ sales <- transactions[type=='sale', .(description, amount=amount*-1, itemid,
 The following are unknown transactions. This is a summary of transactions that
 weren't classified and weren't part of this summary.
 
-```{r unknowntxtable, results='asis'}
+```{r unknowntxtable}
 unkTx <- sales[itemid=='UNK', .(description, amount)]
 if (nrow(unkTx) > 0) {
     xt <- xtable(unkTx)
@@ -47,7 +47,7 @@ if (nrow(unkTx) > 0) {
 
 #### Summary
 
-```{r salestx, results='asis'}
+```{r salestx}
 xt <- xtable(sales[, .(tot=sum(amount)), .(category)][order(-tot)])
 print(xt, type='html', include.rownames=F)
 ```
@@ -57,7 +57,7 @@ Here we are listing the groceries transactions, the visits column indicates how
 many times we went to that store, the column totvisit is just an average of the
 total by visits.
 
-```{r groceriesxt, results='asis'}
+```{r groceriesxt}
 summaryReport <- function(cat) {
     summary <- sales[category==cat, .(tot=sum(amount), visits=.N),
                      .(name)][,.(name, tot, visits,
@@ -72,31 +72,31 @@ summaryReport('groceries')
 
 ### Restaurants
 
-```{r restxt, results='asis'}
+```{r restxt}
 summaryReport('restaurant')
 ```
 
 ### Shopping
 
-```{r shoppingxt, results='asis'}
+```{r shoppingxt}
 summaryReport('shopping')
 ```
 
 ### Babies
 
-```{r babiesxt, results='asis'}
+```{r babiesxt}
 summaryReport('babies')
 ```
 
 ### Car
 
-```{r carsxt, results='asis'}
+```{r carsxt}
 summaryReport('car')
 ```
 
 ### Other
 
-```{r otherxt, results='asis'}
+```{r otherxt}
 summaryReport('other')
 ```
 
@@ -104,35 +104,35 @@ summaryReport('other')
 
 ### Utilities
 
-```{r utilitiesxt, results='asis'}
+```{r utilitiesxt}
 xt <- xtable(transactions[category=='utilities',
              .(name=ifelse(name=='Unknown', description, name), amount=-1*amount)])
 print(xt, type='html', include.rownames=F)
 ```
 
 ### Returns
-```{r returnsxt, results='asis'}
+```{r returnsxt}
 xt <- xtable(transactions[type=='return',
              .(name=ifelse(name=='Unknown', description, name), amount)])
 print(xt, type='html', include.rownames=F)
 ```
 
 ### Payments
-```{r paymentsxt, results='asis'}
+```{r paymentsxt}
 xt <- xtable(transactions[type=='payment',
              .(name=ifelse(name=='Unknown', description, name), amount, account)])
 print(xt, type='html', include.rownames=F)
 ```
 
 ### Credits
-```{r creditsxt, results='asis'}
+```{r creditsxt}
 xt <- xtable(transactions[type=='credit',
              .(name=ifelse(name=='Unknown', description, name) , amount)])
 print(xt, type='html', include.rownames=F)
 ```
 
 ### Withdraw
-```{r withdrawxt, results='asis'}
+```{r withdrawxt}
 xt <- xtable(transactions[category=='withdraw',
              .(cdate=as.character(date), name=ifelse(name=='Unknown', description, name)
                , amount=-1*amount)][order(cdate)])
@@ -141,15 +141,20 @@ print(xt, type='html', include.rownames=F)
 
 
 ### Recurring payments
-```{r recurringxt, results='asis'}
+```{r recurringxt}
 xt <- xtable(transactions[category=='recurring',
              .(name=ifelse(name=='Unknown', description, name), amount=-1*amount)])
 print(xt, type='html', include.rownames=F)
 ```
 
-transactions[type %in% c('check', 'debit') && category != 'saving',
-            .(total=sum(amount))]
-transactions[type=='credit', .(total=sum(amount))]
-transactions[category=='recurring', .(total=sum(amount))]
 # recurring minus income extras
-transactions[category=='recurring' & !(itemid %in% c('AF', 'PB')), .(total=sum(amount))]
+```{r recurrinminus}
+#transactions[type %in% c('check', 'debit') && category != 'saving',
+            #.(total=sum(amount))]
+#transactions[type=='credit', .(total=sum(amount))]
+#transactions[category=='recurring', .(total=sum(amount))]
+
+xt <- xtable(transactions[category=='recurring' & !(itemid %in% c('AF', 'PB')),
+             .(total=sum(amount))])
+print(xt, type='html', include.rowname=F)
+```
