@@ -16,23 +16,19 @@ library(xtable)
 opts_chunk$set(echo=FALSE, results="asis")
 
 source('./init.R')
-timePeriod <- '2015/10'
-transactions <- initialize(paste0('./data/bank/', timePeriod), '*.csv')
-
-
-transactions
+timePeriod <- '2015/11'
+transactions <- initialize(paste0('../data/bank/', timePeriod), '*.csv')
 ```
 
 ## Intro
-
 This analysis is performed for the period: `r timePeriod` 
+
 ## Sales transactions
 This transactions are what we spent in the CCs.
 
 ```{r salestransactions}
-sales <- merge(transactions[type=='sale',
-               .(description, amount=amount*-1, itemid, date, day=weekdays(date))
-               ], items[,.(itemid, category, name)], by='itemid')
+sales <- transactions[type=='sale', .(description, amount=amount*-1, itemid,
+                                      category, date, name, day=weekdays(date))]
 ```
 
 ## Unknown transactions
@@ -71,7 +67,7 @@ summaryReport <- function(cat) {
     print(xt, type='html', include.rownames=F)
 }
 
-s('groceries')
+summaryReport('groceries')
 ```
 
 ### Restaurants

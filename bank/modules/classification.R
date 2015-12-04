@@ -7,7 +7,6 @@ classification <- function() {
         colClasses = c('factor', 'character', 'logical', 'factor', 'character')
     )
 
-    #Oportunity
     items <- list(
         items = NULL,
         total = NULL
