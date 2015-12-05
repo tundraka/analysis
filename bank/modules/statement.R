@@ -1,4 +1,3 @@
-# Bank names are organized like mmyyyy-bankid.csv
 library(data.table)
 
 source('./modules/fileconf.R')

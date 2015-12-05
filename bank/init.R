@@ -1,4 +1,4 @@
-source('./modules/transactions.R')
+source('./modules/statement.R')
 source('./modules/classification.R')
 
 # TODO Load the list of time periods
