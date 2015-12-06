@@ -32,9 +32,3 @@ ggplot(sales, aes(day, amount)) + geom_boxplot()
 ggplot(sales, aes(category, amount)) + geom_boxplot()
 ggplot(sales, aes(x=day, y=category)) + geom_bin2d() +
     scale_fill_gradient(low="green", high="red")
-
-# Adding a colum that contain the YYYY-mm
-transactions[,ym:=format(date, '%Y-%m')]
-deb <- transactions[,.(total=sum(amount)), .(category, ym)]
-ggplot(deb, aes(ym, total, group=category)) +
-    geom_line(aes(color=category))
