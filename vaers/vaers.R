@@ -17,19 +17,22 @@ vaersColClasses <- c('numeric', datesAs, 'factor', rep('numeric', 3), 'factor',
                      'numeric', rep('factor', 3), rep(datesAs, 2), 'numeric',
                      'character', rep('factor', 2), rep('character', 5))
 
-vaersColNames <- c('vaersid', 'datereceived', , 'state', 'age', 'ageyears',
+vaersColNames <- c('vaersid', 'datereceived', 'state', 'age', 'ageyears',
                    'agemonths', 'sex', 'reportdate', 'symptoms', 'died',
                    'datedied', 'lifethreateningeffect', 'ervisit', 'hospitalized',
                    'hospitalizeddays', 'prolongedhospitalization', 'disable',
-                   'recovered', 'vaccinationdate', ...)
+                   'recovered', 'vaccinationdate', 'onsetdate', 'numdays',
+                   'labdata', 'administeredby', 'fundby', 'othermeds',
+                   'currentillnesses', 'history', 'priorvaccinations',
+                   'naufacturernumber')
 
 # fread is reading string fields that contain a , as different fields, looks like
 # this is a know issue.
-vaersdata <- as.data.table(read.csv(vaersDataFile, colClasses=colClasses))
+vaersdata <- as.data.table(read.csv(vaersDataFile, colClasses=vaersColClasses))
 
 # TODO set better column names.
 currentColNames <- names(vaersdata)
-setnames(vaersdata, currentColNames, tolower(gsub('_', '', currentColNames)))
+setnames(vaersdata, currentColNames, vaersColNames)
 
 #
 # READING VAERSVAX DATA
@@ -88,16 +91,16 @@ ggplot(totsBySexState, aes(state, tot, fill=sex)) +
     labs(title=paste(dataLabel, ': Top', topTot, 'states with more reports'))
 
 # What's the age distribution in the VAERS reports?
-ageDist <- vaersdata[!is.na(ageyrs),.(tot=.N),.(ageyrs)][order(ageyrs)]
-ggplot(ageDist, aes(ageyrs, tot)) +
+ageDist <- vaersdata[!is.na(ageyears),.(tot=.N),.(ageyears)][order(ageyears)]
+ggplot(ageDist, aes(ageyears, tot)) +
     geom_bar(stat='identity') +
     labs(title=paste(dataLabel, ': Age distribution'))
 
 # What's the age distribution and sex?
 ageBreaks <- c(-1, 1, 5, seq(10, 100, by=10), 2000)
 #ageLabels <- c('0-1', '1-5', '5-10', '10-20', '20-30', '30-40', '40-60', '60+')
-ages <- vaersdata[!is.na(ageyrs), .(ageyrs, sex)]
-ages[,agesegment:=cut(ages$ageyrs, ageBreaks)]#, labels=ageLabels)]
+ages <- vaersdata[!is.na(ageyears), .(ageyears, sex)]
+ages[,agesegment:=cut(ages$ageyears, ageBreaks)]#, labels=ageLabels)]
 ggplot(ages, aes(agesegment, fill=sex)) +
     geom_bar() + 
     labs(title=paste(dataLabel, ': Reports by age.')) +
@@ -105,11 +108,11 @@ ggplot(ages, aes(agesegment, fill=sex)) +
     labs(y='Total')
 
 # What are the vaccines that generated the most reports by state
-vaxinfo <- merge(vaersdata[, .(vaersid, state, sex, ageyrs)],
+vaxinfo <- merge(vaersdata[, .(vaersid, state, sex, ageyears)],
                  vaxdata[,.(vaersid, type, manufacturer, name)],
                  by='vaersid')
 topStatesVaxInfo <- vaxinfo[state %in% totsByState[1:topTot, .(state)]$state &
-                            ageyrs < 2.5
+                            ageyears < 2.5,
                             .(tot=.N),
                             .(sex, state, type)]
 # todo, this needs to be refined.
@@ -120,11 +123,11 @@ ggplot(topStatesVaxInfo, aes(state, tot, fill=type)) +
 # Most commons reported vaccines for <5 yrs
 
 # If we will be working with ages, let's remove the NAs.
-vaxinfoages <- vaxinfo[!is.na(ageyrs)]
-ageSegments <- cut(vaxinfoages$ageyrs, c(-1, 1, 2.5, 5, 12, 15, 22, 35, 50, 60, 1000))
+vaxinfoages <- vaxinfo[!is.na(ageyears)]
+ageSegments <- cut(vaxinfoages$ageyears, c(-1, 1, 2.5, 5, 12, 15, 22, 35, 50, 60, 1000))
 vaxinfoages[,agesegment:=ageSegments]
 
-vax25 <- vaxinfoages[ageyrs<=5,
+vax25 <- vaxinfoages[ageyears<=5,
                  .(tot=.N),
                  .(type, sex, agesegment)][order(-tot)]
 ggplot(vax25, aes(type, tot, fill=sex)) +
@@ -135,7 +138,7 @@ ggplot(vax25, aes(type, tot, fill=sex)) +
     labs(x='Vaccine') +
     labs(y='Reports/Age group')
 
-vax522 <- vaxinfoages[ageyrs>5 & ageyrs<=22,
+vax522 <- vaxinfoages[ageyears>5 & ageyears<=22,
                  .(tot=.N),
                  .(type, sex, agesegment)][order(-tot)]
 ggplot(vax522, aes(type, tot, fill=sex)) +
@@ -147,7 +150,7 @@ ggplot(vax522, aes(type, tot, fill=sex)) +
     labs(x='Vaccine') +
     labs(y='Reports/Age group')
 
-vax22p <- vaxinfoages[ageyrs>22,
+vax22p <- vaxinfoages[ageyears>22,
                  .(tot=.N),
                  .(type, sex, agesegment)][order(-tot)]
 ggplot(vax22p, aes(type, tot, fill=sex)) +
