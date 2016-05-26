@@ -10,6 +10,9 @@ data <- fread('../data/amazon/2016.csv', header=T, colClasses=colClasses, select
 
 setnames(data, names(data), colNames)
 data[,`:=`(date=as.Date(date, format='%m/%d/%y'),
+           payment=gsub('\\D', '', tolower(payment)),
            itemtype=as.factor(tolower(gsub(' ', '_', itemtype))),
            total=as.numeric(sub('\\$', '', total))
            )]
+cc1 <- data[payment==1324]
+cc1[,.(itemtype, tot=sum(total)), .(itemtype)][order(-tot)]
