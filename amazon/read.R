@@ -1,4 +1,5 @@
 library(data.table)
+library(ggplot2)
 
 colClasses <- c('date', rep('character', 2), 'type', rep('character', 3), 'date',
                 rep('character', 5), 'numeric', rep('character', 4), 'date',
@@ -15,4 +16,5 @@ data[,`:=`(date=as.Date(date, format='%m/%d/%y'),
            total=as.numeric(sub('\\$', '', total))
            )]
 cc1 <- data[payment==1324]
-cc1[,.(itemtype, tot=sum(total)), .(itemtype)][order(-tot)]
+g <- cc1[,.(itemtype, tot=sum(total)), .(itemtype)][order(-tot)]
+ggplot(g, aes(itemtype, tot)) + geom_boxplot()
