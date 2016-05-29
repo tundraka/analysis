@@ -16,5 +16,6 @@ data[,`:=`(date=as.Date(date, format='%m/%d/%y'),
            total=as.numeric(sub('\\$', '', total))
            )]
 cc1 <- data[payment==1324]
+cc2 <- data[payment==1324]
 g <- cc1[,.(itemtype, tot=sum(total)), .(itemtype)][order(-tot)]
 ggplot(g, aes(itemtype, tot)) + geom_boxplot()
